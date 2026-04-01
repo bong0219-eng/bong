@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>가톨릭 순례길</title>
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=07f7989e29fdfb425fff924f36fb3ec0&libraries=clusterer"></script>
+<style>
+:root {
+  --brand: #8B1C2A;
+  --brand-bg: #fdf5f5;
+  --surface: #ffffff;
+  --surface2: #f4f4f4;
+  --border: #e8e0e0;
+  --text: #1a1a1a;
+  --text-sub: #666;
+  --text-muted: #aaa;
+  --radius: 12px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  background: var(--brand-bg);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+@media (min-width: 600px) {
+  body { align-items: center; background: #e8e4e4; }
+  .sr-wrap { max-width: 480px; box-shadow: 0 0 32px rgba(0,0,0,0.15); }
+}
+
+.sr-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--brand-bg);
+}
+
+/* 헤더 */
+.sr-header {
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
+  padding: 12px 14px 10px;
+  flex-shrink: 0;
+  z-index: 20;
+}
+.sr-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+.sr-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--brand);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.sr-count-badge {
+  font-size: 11px;
+  background: var(--brand-bg);
+  color: var(--brand);
+  border: 1px solid #e0bfbf;
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+/* 뷰 토글 */
+.sr-view-toggle {
+  display: flex;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 3px;
+  border: 1.5px solid var(--border);
+  gap: 2px;
+}
+.sr-view-btn {
+  padding: 5px 14px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+}
+.sr-view-btn.active {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+/* 필터 */
+.sr-filters {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 1px;
+}
+.sr-filters::-webkit-scrollbar { display: none; }
+.sr-filter-btn {
+  flex-shrink: 0;
+  padding: 5px 13px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text-sub);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.sr-filter-btn.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* 지도 패널 */
+.sr-map-panel {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+#srKakaoMap { width: 100%; height: 100%; }
+
+.sr-legend {
+  position: absolute;
+  bottom: 54px;
+  left: 12px;
+  background: rgba(255,255,255,0.96);
+  border-radius: 8px;
+  padding: 8px 11px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 5;
+  font-size: 11.5px;
+  pointer-events: none;
+}
+.sr-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-sub);
+  line-height: 2;
+}
+.sr-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.sr-legend-dot.diocese { background: #8B1C2A; }
+.sr-legend-dot.local   { background: #2a6b8b; }
+
+.sr-locate-btn {
+  position: absolute;
+  bottom: 54px;
+  right: 12px;
+  width: 42px; height: 42px;
+  background: var(--surface);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  font-size: 19px;
+}
+
+/* 리스트 패널 */
+.sr-list-panel {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 12px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-height: 0;
+}
+.sr-list-panel::-webkit-scrollbar { display: none; }
+.sr-list-panel.hidden, .sr-map-panel.hidden { display: none; }
+
+/* 카드 */
+.sr-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+.sr-card:active { transform: scale(0.985); }
+.sr-card-body {
+  padding: 12px 12px 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.sr-card-icon {
+  width: 38px; height: 38px;
+  border-radius: 9px;
+  background: var(--brand-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.sr-card-info { flex: 1; min-width: 0; }
+.sr-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  word-break: keep-all;
+  white-space: normal;
+  line-height: 1.35;
+}
+.sr-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 3px;
+}
+.sr-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+.sr-badge.diocese { background: #8B1C2A; }
+.sr-badge.local   { background: #2a6b8b; }
+.sr-card-region { font-size: 11.5px; color: var(--text-sub); }
+.sr-card-operator { font-size: 11px; color: var(--text-muted); }
+.sr-card-footer {
+  border-top: 1px solid #f0e8e8;
+  padding: 7px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.sr-card-url {
+  font-size: 11px;
+  color: var(--brand);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+.sr-card-mapbtn {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-sub);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 9px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+/* 인포윈도우 */
+.sr-infowindow {
+  background: #fff;
+  border-radius: 10px;
+  padding: 11px 13px 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  min-width: 170px;
+  max-width: 230px;
+  position: relative;
+  border: 1px solid #e8e0e0;
+  font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+}
+.sr-iw-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 5px;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+.sr-iw-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 3px;
+  flex-wrap: wrap;
+}
+.sr-iw-badge {
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+}
+.sr-iw-badge.diocese { background: #8B1C2A; }
+.sr-iw-badge.local   { background: #2a6b8b; }
+.sr-iw-region { font-size: 11px; color: #666; }
+.sr-iw-op { font-size: 11px; color: #999; margin-bottom: 8px; }
+.sr-iw-btn {
+  display: block;
+  width: 100%;
+  padding: 7px;
+  background: #8B1C2A;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+}
+.sr-iw-tail {
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 9px solid #fff;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.08));
+}
+</style>
+</head>
+<body>
+
+<script>
+/* 카카오톡 인앱브라우저 → 외부 브라우저로 리다이렉트 */
+(function() {
+  if (/KAKAOTALK/i.test(navigator.userAgent || '')) {
+    const url = encodeURIComponent(location.href);
+    // iOS: Safari로 이동 유도 (direct open 불가, 안내 페이지)
+    if (/iPhone|iPad/i.test(navigator.userAgent)) {
+      document.write('<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;padding:32px;text-align:center;gap:16px;background:#fdf5f5"><div style="font-size:32px">🌐</div><div style="font-size:16px;font-weight:700;color:#8B1C2A">Safari에서 열기</div><div style="font-size:13px;color:#666;line-height:1.6">카카오톡에서는 일부 기능이 제한됩니다.<br>하단 <b>···</b> 또는 <b>공유</b> 버튼 → <b>Safari로 열기</b>를 탭해주세요.</div></div>');
+      return;
+    }
+    // Android: intent로 삼성 인터넷 실행
+    location.href = 'intent://' + location.href.replace(/https?:\/\//, '')
+      + '#Intent;scheme=https;package=com.sec.android.app.sbrowser;end';
+  }
+})();
+</script>
+
+<div class="sr-wrap" id="tab-sunraegil">
+  <div class="sr-header">
+    <div class="sr-header-top">
+      <div class="sr-title">🚶 순례길 <span class="sr-count-badge" id="srCountBadge">11개</span></div>
+      <div class="sr-view-toggle">
+        <button class="sr-view-btn active" id="btnMap" onclick="switchView('map')">🗺 지도</button>
+        <button class="sr-view-btn" id="btnList" onclick="switchView('list')">☰ 목록</button>
+      </div>
+    </div>
+    <div class="sr-filters">
+      <button class="sr-filter-btn active" data-filter="all">전체</button>
+      <button class="sr-filter-btn" data-filter="diocese">교구 운영</button>
+      <button class="sr-filter-btn" data-filter="local">지자체·단체</button>
+    </div>
+  </div>
+
+  <div class="sr-map-panel" id="srMapPanel">
+    <div id="srKakaoMap"></div>
+    <div class="sr-legend">
+      <div class="sr-legend-item"><div class="sr-legend-dot diocese"></div>교구 운영</div>
+      <div class="sr-legend-item"><div class="sr-legend-dot local"></div>지자체·단체</div>
+    </div>
+    <div class="sr-locate-btn" onclick="moveToMyLocation()">📍</div>
+  </div>
+
+  <div class="sr-list-panel hidden" id="srListPanel"></div>
+</div>
+
+<script>
+/* 데이터 */
+const SUNRAEGIL_DATA = [
+  { name:"천주교 서울 순례길",          operator:"서울대교구",            type:"diocese", region:"서울시",          lat:37.5644, lng:127.0104, icon:"✝️",  url:"https://martyrs.or.kr/_web/mpilgrims/about.html" },
+  { name:"성지순례길 '디딤길'",         operator:"수원교구",              type:"diocese", region:"수원시",          lat:37.2832, lng:127.0170, icon:"🙏",  url:"https://www.casuwon.or.kr/holyland/pilgrimage" },
+  { name:"순례길 '님의 길'",            operator:"원주교구",              type:"diocese", region:"원주·횡성·제천",   lat:37.3420, lng:127.9200, icon:"🌿",  url:"https://sunraegil.seoji.net/course/all" },
+  { name:"한티가는길",                  operator:"대구대교구",            type:"diocese", region:"칠곡·대구팔공산",  lat:36.0168, lng:128.6299, icon:"⛰️", url:"https://hantigil.or.kr/index" },
+  { name:"노안⇔나주순교자기념성당 외",  operator:"광주대교구",            type:"diocese", region:"나주·영광",         lat:35.0369, lng:126.7152, icon:"🕊️", url:"https://www.gjcatholic.or.kr/holyland/pilgrimage/noan_naju" },
+  { name:"천주교제주순례길",            operator:"제주교구",              type:"diocese", region:"제주",             lat:33.4463, lng:126.3027, icon:"🌊",  url:"http://santoviaggio.com/course/10?sca=%EC%A0%84%EC%B2%B4%EC%BD%94%EC%8A%A4&id=0301" },
+  { name:"사제와 함께하는 도보순례",    operator:"안동교구",              type:"diocese", region:"문경·상주",          lat:36.8001, lng:128.2113, icon:"👣",  url:"https://www.acatholic.or.kr/sub4/sub2.asp" },
+  { name:"요안루갈다길 외",             operator:"전주교구",              type:"diocese", region:"전주·완주",          lat:35.8031, lng:127.1677, icon:"🌾",  url:"https://www.jcatholic.or.kr/theme/main/pages/pilgrimage01.html" },
+  { name:"보령 갈매못 성지순례길",      operator:"보령시",                type:"local",   region:"보령",             lat:36.4280, lng:126.5075, icon:"🌅",  url:"https://www.brcn.go.kr/tour/sub02_02_02.do" },
+  { name:"내포 천주교 순례길",          operator:"사단법인 내포문화숲길", type:"local",   region:"예산·서산",           lat:36.7127, lng:126.5380, icon:"🌲",  url:"https://naepotrail.org/course/catholic" },
+  { name:"버그내순례길",                operator:"당진시청",              type:"local",   region:"당진",             lat:36.8199, lng:126.7848, icon:"🏞️", url:"https://beogeunae.dangjin.go.kr/pil1.html" }
+];
+
+let map, markers = [], overlay = null, currentFilter = 'all';
+
+function initSunraegilMap() {
+  map = new kakao.maps.Map(document.getElementById('srKakaoMap'), {
+    center: new kakao.maps.LatLng(36.2, 127.9),
+    level: 13
+  });
+  map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
+  renderMarkers('all');
+  renderList('all');
+
+  document.querySelectorAll('.sr-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sr-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderMarkers(currentFilter);
+      renderList(currentFilter);
+      updateCount(currentFilter);
+    });
+  });
+  kakao.maps.event.addListener(map, 'click', closeOverlay);
+}
+
+function makeMarkerSVG(color, emoji) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="42" height="52" viewBox="0 0 42 52">
+    <ellipse cx="21" cy="49" rx="9" ry="3" fill="rgba(0,0,0,0.15)"/>
+    <path d="M21 2C11 2 3 10 3 21c0 12 18 27 18 27s18-15 18-27C39 10 31 2 21 2Z" fill="${color}" stroke="white" stroke-width="2.5"/>
+    <text x="21" y="27" text-anchor="middle" font-size="17">${emoji}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+function closeOverlay() {
+  if (overlay) { overlay.setMap(null); overlay = null; }
+}
+
+/* 카카오톡 포함 모든 환경에서 링크 열기 */
+function openUrl(url) {
+  const ua = navigator.userAgent || '';
+  if (/KAKAOTALK/i.test(ua)) {
+    if (/iPhone|iPad/i.test(ua)) return; // iOS는 리다이렉트 페이지로 처리됨
+    location.href = 'intent://' + url.replace(/https?:\/\//, '')
+      + '#Intent;scheme=https;package=com.sec.android.app.sbrowser;end';
+    return;
+  }
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function renderMarkers(filter) {
+  markers.forEach(m => m.setMap(null));
+  markers = [];
+  closeOverlay();
+  const list = filter === 'all' ? SUNRAEGIL_DATA : SUNRAEGIL_DATA.filter(d => d.type === filter);
+
+  list.forEach((d, i) => {
+    const color = d.type === 'diocese' ? '#8B1C2A' : '#2a6b8b';
+    const marker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(d.lat, d.lng),
+      map,
+      image: new kakao.maps.MarkerImage(
+        makeMarkerSVG(color, d.icon),
+        new kakao.maps.Size(42, 52),
+        { offset: new kakao.maps.Point(21, 52) }
+      ),
+      title: d.name
+    });
+
+    kakao.maps.event.addListener(marker, 'click', () => {
+      closeOverlay();
+      const bc = d.type === 'diocese' ? 'diocese' : 'local';
+      const bl = d.type === 'diocese' ? '교구' : '지자체·단체';
+      // onclick 속성 대신 dataset으로 index 전달 (CSP 대응)
+      const content = `<div class="sr-infowindow">
+        <div class="sr-iw-name">${d.icon} ${d.name}</div>
+        <div class="sr-iw-meta">
+          <span class="sr-iw-badge ${bc}">${bl}</span>
+          <span class="sr-iw-region">📍 ${d.region}</span>
+        </div>
+        <div class="sr-iw-op">${d.operator}</div>
+        <button class="sr-iw-btn" data-url="${d.url}">홈페이지 방문 →</button>
+        <div class="sr-iw-tail"></div>
+      </div>`;
+
+      overlay = new kakao.maps.CustomOverlay({
+        content, zIndex: 10,
+        position: new kakao.maps.LatLng(d.lat, d.lng),
+        yAnchor: 1.6
+      });
+      overlay.setMap(map);
+      map.panTo(new kakao.maps.LatLng(d.lat, d.lng));
+
+      // 오버레이 삽입 후 버튼 이벤트 바인딩
+      setTimeout(() => {
+        const btn = document.querySelector('.sr-iw-btn[data-url]');
+        if (btn) btn.addEventListener('click', () => openUrl(btn.dataset.url));
+      }, 30);
+    });
+    markers.push(marker);
+  });
+}
+
+function renderList(filter) {
+  const panel = document.getElementById('srListPanel');
+  panel.innerHTML = '';
+  const list = filter === 'all' ? SUNRAEGIL_DATA : SUNRAEGIL_DATA.filter(d => d.type === filter);
+
+  list.forEach((d, i) => {
+    const bc = d.type === 'diocese' ? 'diocese' : 'local';
+    const bl = d.type === 'diocese' ? '교구' : '지자체·단체';
+    const card = document.createElement('div');
+    card.className = 'sr-card';
+    card.innerHTML = `
+      <div class="sr-card-body">
+        <div class="sr-card-icon">${d.icon}</div>
+        <div class="sr-card-info">
+          <div class="sr-card-name">${d.name}</div>
+          <div class="sr-card-meta">
+            <span class="sr-badge ${bc}">${bl}</span>
+            <span class="sr-card-region">📍 ${d.region}</span>
+          </div>
+          <div class="sr-card-operator">${d.operator}</div>
+        </div>
+      </div>
+      <div class="sr-card-footer">
+        <span class="sr-card-url">${d.url.replace(/https?:\/\//,'')}</span>
+        <button class="sr-card-mapbtn">지도 보기</button>
+      </div>`;
+
+    card.querySelector('.sr-card-mapbtn').addEventListener('click', e => {
+      e.stopPropagation();
+      switchView('map');
+      setTimeout(() => {
+        map.setLevel(8);
+        map.panTo(new kakao.maps.LatLng(d.lat, d.lng));
+        if (markers[i]) kakao.maps.event.trigger(markers[i], 'click');
+      }, 60);
+    });
+
+    card.addEventListener('click', () => openUrl(d.url));
+    panel.appendChild(card);
+  });
+}
+
+function updateCount(filter) {
+  const n = filter === 'all' ? SUNRAEGIL_DATA.length
+    : SUNRAEGIL_DATA.filter(d => d.type === filter).length;
+  document.getElementById('srCountBadge').textContent = n + '개';
+}
+
+function switchView(view) {
+  const mp = document.getElementById('srMapPanel');
+  const lp = document.getElementById('srListPanel');
+  const bm = document.getElementById('btnMap');
+  const bl = document.getElementById('btnList');
+  if (view === 'map') {
+    mp.classList.remove('hidden'); lp.classList.add('hidden');
+    bm.classList.add('active');   bl.classList.remove('active');
+    if (map) setTimeout(() => kakao.maps.event.trigger(map, 'resize'), 10);
+  } else {
+    mp.classList.add('hidden');   lp.classList.remove('hidden');
+    bm.classList.remove('active'); bl.classList.add('active');
+  }
+}
+
+function moveToMyLocation() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(pos => {
+    map.panTo(new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+    map.setLevel(7);
+  });
+}
+
+kakao.maps.load(() => initSunraegilMap());
+</script>
+</body>
+</html>
