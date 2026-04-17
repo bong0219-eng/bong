@@ -1052,6 +1052,32 @@ const searchInput = document.getElementById('searchInput');
 const detailView = document.getElementById('detail-view');
 const tabContainer = document.querySelector('.tab-container');
 
+let isDown = false;
+let startX;
+let scrollLeft;
+
+tabContainer.addEventListener('mousedown', (e) => {
+  isDown = true;
+  startX = e.pageX - tabContainer.offsetLeft;
+  scrollLeft = tabContainer.scrollLeft;
+});
+
+tabContainer.addEventListener('mouseleave', () => {
+  isDown = false;
+});
+
+tabContainer.addEventListener('mouseup', () => {
+  isDown = false;
+});
+
+tabContainer.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - tabContainer.offsetLeft;
+  const walk = (x - startX) * 1.5;
+  tabContainer.scrollLeft = scrollLeft - walk;
+}); 
+  
 let currentCategory = 'aim';
 let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
