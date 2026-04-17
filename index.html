@@ -848,6 +848,16 @@ border-radius: 16px;
         const tabBtns = document.querySelectorAll('.tab-btn');
         let currentCategory = 'aim';
 
+function getIcon(title) {
+    if (title.includes('성모')) return 'fa-hands-praying';
+    if (title.includes('묵주')) return 'fa-beads';
+    if (title.includes('성인')) return 'fa-cross';
+    if (title.includes('예수')) return 'fa-book-bible';
+    return 'fa-cross';
+}
+
+
+        
         function renderList(category) {
             listContainer.innerHTML = '';
             const categoryData = prayerData[category];
@@ -859,7 +869,15 @@ border-radius: 16px;
                 const li = document.createElement('li');
                 li.className = 'prayer-item';
                 li.onclick = () => { window.location.hash = `#prayer-${prayer.id}`; };
-                li.innerHTML = `<div class="prayer-title">${prayer.title}</div><div class="prayer-icon"><i class="fas fa-chevron-right"></i></div>`;
+                li.innerHTML = `
+    <div class="prayer-title">
+        <i class="fas ${getIcon(prayer.title)}"></i>
+        ${prayer.title}
+    </div>
+    <div class="prayer-icon">
+        <i class="fas fa-chevron-right"></i>
+    </div>
+`;
                 listContainer.appendChild(li);
             });
         }
