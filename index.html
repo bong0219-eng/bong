@@ -10,14 +10,13 @@
 :root {
     --bg-color: #F7F4F1;
     --white: #FFFFFF;
-
     --text-main: #2B2B2B;
     --text-sub: #7A6E66;
-
     --primary-pastel: #EDE3DB;
-    --primary-active: #6B4F3A;   /* 핵심 브라운 */
-    --accent-color: #8B5E3C;     /* 포인트 브라운 */
+    --primary-active: #6B4F3A;
+    --accent-color: #8B5E3C;
     --border-color: #E5DDD6;
+    --header-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
     * {
@@ -27,86 +26,100 @@
         -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-        font-family: 'Pretendard', sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-main);
-        line-height: 1.65;
-        overflow-x: hidden;
-    }
+body {
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    color: #2B2B2B;
+    background: #F7F4F1;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+}
 
 header {
-    background: linear-gradient(135deg, #6B4F3A, #8B5E3C);
-    color: #FFFFFF;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #6B4F3A, #8B5E3C);
+    color: #fff;
+    font-size: 18px;
     font-weight: 700;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.02em;
+    z-index: 100;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-    .tab-container {
-        position: fixed;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        background-color: rgba(255,255,255,0.96);
-        backdrop-filter: blur(8px);
-        z-index: 90;
-        display: flex;
-        overflow-x: auto;
-        padding: 12px 16px;
-        gap: 8px;
-        border-bottom: 1px solid #EEE7E1;
-        scrollbar-width: none;
-    }
+.tab-container {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    background: rgba(255,255,255,0.96);
+    border-bottom: 1px solid #E7DDD6;
+    z-index: 90;
+    scrollbar-width: none;
+}
 
-    .tab-container::-webkit-scrollbar {
-        display: none;
-    }
+.tab-container::-webkit-scrollbar {
+    display: none;
+}
 
-    .tab-btn {
-        flex: 0 0 auto;
-        padding: 9px 16px;
-        border-radius: 999px;
-        border: 1px solid var(--border-color);
-        background-color: #FAF8F6;
-        color: #5F6670;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        white-space: nowrap;
-    }
+.tab-btn {
+    flex: 0 0 auto;
+    min-width: 132px;
+    height: 56px;
+    padding: 0 20px;
+    border-radius: 28px;
+    border: 1px solid #DDD2C9;
+    background: #F4EFEA;
+    color: #6F625A;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}
 
     .tab-btn:hover {
         background-color: #F3EEE9;
     }
 
- .tab-btn.active {
-    background-color: var(--primary-active);
-    color: #FFFFFF;
-    border-color: var(--primary-active);
-    box-shadow: 0 4px 10px rgba(107,79,58,0.25);
+.tab-btn.active {
+    background: #7B573D;
+    color: #fff;
+    border-color: #7B573D;
+    box-shadow: 0 6px 16px rgba(123,87,61,0.20);
+}
+#list-view {
+    padding: 148px 16px 28px;
 }
 
-    #list-view {
-        padding: 130px 16px 32px;
-        min-height: 100vh;
-    }
+.prayer-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-    .prayer-list {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
+.prayer-item {
+    width: 100%;
+    min-height: 96px;
+    padding: 0 20px;
+    background: #FFFDFC;
+    border: 1px solid #E1D7CF;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px rgba(70, 45, 25, 0.05);
 
- .prayer-item {
-    background: linear-gradient(145deg, #FFFFFF, #F8F5F2);
-    padding: 14px 16px; /* 기존보다 살짝 줄임 */
-    border-radius: 14px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 3px 10px rgba(80, 50, 30, 0.06);
-    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
 }
 
     .prayer-item:active {
@@ -120,15 +133,26 @@ header {
 }
 
 .prayer-title {
-    font-size: 15px; /* 살짝 줄여서 밀도 ↑ */
-    font-weight: 600;
-    color: #2B2B2B;
+    flex: 1;
+    min-width: 0;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    color: #2D2D2D;
+    word-break: keep-all;
 }
 
 .prayer-icon {
-    color: var(--primary-active);
-    font-size: 14px;
-    opacity: 0.8;
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8B6A53;
+    font-size: 18px;
+    line-height: 1;
 }
 
     #detail-view {
@@ -165,11 +189,7 @@ header {
         z-index: 210;
     }
 
-.tab-btn {
-    background-color: #F4EFEA;
-    color: #6F635C;
-    border: 1px solid #E2D8CF;
-}
+
 
     .detail-title {
         flex: 1;
