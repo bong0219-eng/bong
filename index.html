@@ -1062,7 +1062,10 @@ function renderList(category) {
   filtered.forEach(prayer => {
     const li = document.createElement('li');
     li.className = 'prayer-item';
-    li.onclick = () => { window.location.hash = `#prayer-${prayer.id}`; };
+   li.onclick = () => {
+  searchInput.value = '';
+  window.location.hash = `#prayer-${prayer.id}`;
+};
     li.innerHTML = `
       <div class="prayer-item-left">
         <div class="prayer-icon-dot"><i class="fa-solid fa-cross"></i></div>
@@ -1084,8 +1087,18 @@ tabBtns.forEach(btn => {
     tabBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentCategory = btn.getAttribute('data-category');
+
+    searchInput.value = '';
+    window.location.hash = '';
+
     renderList(currentCategory);
-    window.scrollTo({top:0, behavior:'smooth'});
+
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
+    const tabContainer = document.querySelector('.tab-container');
+    if (tabContainer) {
+      tabContainer.scrollTo({ left: 0, behavior: 'auto' });
+    }
   });
 });
 
@@ -1096,16 +1109,30 @@ renderList(currentCategory);
 function handleRouting() {
   const hash = window.location.hash;
   const dv = document.getElementById('detail-view');
+
   if (hash.startsWith('#prayer-')) {
-    const id = hash.replace('#prayer-','');
+    const id = hash.replace('#prayer-', '');
     let found = null;
-    for (const k in prayerData) { found = prayerData[k].find(p=>p.id===id); if(found) break; }
+
+    for (const k in prayerData) {
+      found = prayerData[k].find(p => p.id === id);
+      if (found) break;
+    }
+
     if (found) {
       document.getElementById('detail-title').innerText = found.title;
       document.getElementById('detail-content').innerHTML = found.content;
       dv.classList.add('show');
-    } else dv.classList.remove('show');
-  } else dv.classList.remove('show');
+
+      dv.scrollTop = 0;
+      window.scrollTo(0, 0);
+    } else {
+      dv.classList.remove('show');
+    }
+  } else {
+    dv.classList.remove('show');
+    window.scrollTo(0, 0);
+  }
 }
 
 window.addEventListener('hashchange', handleRouting);
