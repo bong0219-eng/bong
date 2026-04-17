@@ -925,15 +925,25 @@ function getIcon(title) {
 
 function renderList(category) {
     listContainer.innerHTML = '';
-    const categoryData = prayerData[category];
     const keyword = normalizeText(searchInput ? searchInput.value : '');
 
-    if (!categoryData || categoryData.length === 0) {
+    let dataToSearch = [];
+
+    // 🔥 검색 중이면 전체 데이터
+    if (keyword) {
+        for (const key in prayerData) {
+            dataToSearch = dataToSearch.concat(prayerData[key]);
+        }
+    } else {
+        dataToSearch = prayerData[category];
+    }
+
+    if (!dataToSearch || dataToSearch.length === 0) {
         listContainer.innerHTML = '<div class="empty-state">아직 등록된 기도문이 없습니다.</div>';
         return;
     }
 
-    const filteredData = categoryData.filter(prayer => {
+    const filteredData = dataToSearch.filter(prayer => {
         if (!keyword) return true;
         const title = normalizeText(prayer.title);
         return title.includes(keyword);
