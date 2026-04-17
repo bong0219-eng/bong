@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -12,21 +11,29 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #FFF8E7;
-  --white: #FFFFFF;
-  --text-main: #1A1D23;
-  --text-sub: #6B7280;
-  --text-hint: #9CA3AF;
-  --primary: #3B5BDB;
-  --primary-light: #EEF2FF;
-  --primary-dark: #2C44B8;
-  --border: #D8DBE4;
-  --border-focus: #3B5BDB;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --bg: #F2EDE8;
+  --white: #FFFDF9;
+  --text-main: #2C2416;
+  --text-sub: #7A6652;
+  --text-hint: #B5A090;
+  --primary: #8B5E3C;
+  --primary-light: #F5EDE4;
+  --primary-dark: #6B4528;
+  --border: #DDD0C4;
+  --border-focus: #8B5E3C;
+  --shadow-sm: 0 1px 3px rgba(100,70,40,0.08), 0 1px 2px rgba(100,70,40,0.05);
+  --shadow-md: 0 4px 12px rgba(100,70,40,0.10);
   --header-h: 56px;
-  --tab-h: 52px;
-  --search-h: 56px;
+  --tab-h: 50px;
+  --search-h: 54px;
+  --tab-fav:    #D4881A; --tab-fav-bg:    #FFF3DC;
+  --tab-aim:    #C0392B; --tab-aim-bg:    #FDECEA;
+  --tab-basic:  #6052CC; --tab-basic-bg:  #EEEAFF;
+  --tab-spec:   #2274A5; --tab-spec-bg:   #E4F3FB;
+  --tab-etc:    #1F8F4E; --tab-etc-bg:    #E4F7EC;
+  --tab-bon1:   #636E72; --tab-bon1-bg:   #EEEEF0;
+  --tab-bon2:   #7D3C98; --tab-bon2-bg:   #F3E9FA;
+  --tab-bon3:   #CA6F1E; --tab-bon3-bg:   #FEF2E2;
 }
 
 html, body {
@@ -44,14 +51,14 @@ html, body {
   position: fixed;
   top: 0; left: 0; width: 100%;
   height: var(--header-h);
-  background: #3A2E25;
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #6B3F1E 0%, #8B5E3C 60%, #A5744F 100%);
+  border-bottom: 1px solid #5A3218;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
   z-index: 100;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(80,40,10,0.18);
 }
 
 .header-brand {
@@ -63,49 +70,52 @@ html, body {
 .header-cross {
   width: 28px;
   height: 28px;
-  background: var(--primary);
+  background: rgba(255,255,255,0.22);
   border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-size: 12px;
+  border: 1px solid rgba(255,255,255,0.3);
 }
 
 .header-title {
   font-size: 17px;
   font-weight: 700;
-  color: var(--text-main);
+  color: #fff;
   letter-spacing: -0.03em;
 }
 
 .header-subtitle {
   font-size: 9px;
   font-weight: 500;
-  color: var(--text-hint);
+  color: rgba(255,255,255,0.65);
   letter-spacing: 0.1em;
   margin-top: 1px;
 }
 
+/* 굿뉴스 버튼 — 카카오 노랑 */
 .header-link {
   height: 34px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  color: #3C2F00;
+  gap: 5px;
+  color: #3C1E00;
   background: #FEE500;
-  border: 1px solid #E6D000;
+  border: none;
   text-decoration: none;
   font-size: 12px;
-  font-weight: 600;
-  padding: 0 10px;
+  font-weight: 700;
+  padding: 0 11px;
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  transition: filter 0.15s;
 }
 .header-link i { font-size: 12px; }
-.header-link:hover { background: var(--primary-light); color: var(--primary); border-color: #FDE68A }
+.header-link:hover { filter: brightness(1.06); }
 
 /* ── TABS ── */
 .tab-container {
@@ -114,66 +124,53 @@ html, body {
   left: 0;
   width: 100%;
   height: var(--tab-h);
-
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 12px;
-
+  gap: 5px;
+  padding: 0 10px;
   background: var(--white);
   border-bottom: 1px solid var(--border);
-
   overflow-x: auto;
   overflow-y: hidden;
-
   white-space: nowrap;
-
-  /* 🔥 핵심 */
   touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
-
   scrollbar-width: none;
   z-index: 90;
+  box-shadow: var(--shadow-sm);
 }
+.tab-container::-webkit-scrollbar { display: none; }
 
-.tab-container::-webkit-scrollbar {
-  display: none;
-}
-
+/* 기본 탭 */
 .tab-btn {
   flex: 0 0 auto;
-  min-width: 90px;
-
-  height: 34px;
-  padding: 0 14px;
-
-  border-radius: 17px;
-  border: 1px solid var(--border);
-
+  height: 32px;
+  padding: 0 11px;
+  border-radius: 7px;
+  border: 1.5px solid var(--border);
   background: var(--bg);
   color: var(--text-sub);
-
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-
+  font-family: 'Noto Sans KR', sans-serif;
   white-space: nowrap;
-
-  /* 🔥 중요 */
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+  letter-spacing: -0.02em;
   touch-action: manipulation;
 }
+.tab-btn:active { transform: scale(0.97); }
 
-  
-.tab-btn:active {
-  transform: scale(0.97);
-}
-
-.tab-btn.active {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(59,91,219,0.25);
-}
+/* 탭별 활성 색상 */
+.tab-btn[data-category="favorites"].active { background: var(--tab-fav-bg);   color: var(--tab-fav);   border-color: var(--tab-fav);   box-shadow: 0 2px 6px rgba(212,136,26,0.2); }
+.tab-btn[data-category="aim"].active       { background: var(--tab-aim-bg);   color: var(--tab-aim);   border-color: var(--tab-aim);   box-shadow: 0 2px 6px rgba(192,57,43,0.2); }
+.tab-btn[data-category="basic"].active     { background: var(--tab-basic-bg); color: var(--tab-basic); border-color: var(--tab-basic); box-shadow: 0 2px 6px rgba(96,82,204,0.2); }
+.tab-btn[data-category="special"].active   { background: var(--tab-spec-bg);  color: var(--tab-spec);  border-color: var(--tab-spec);  box-shadow: 0 2px 6px rgba(34,116,165,0.2); }
+.tab-btn[data-category="etc"].active       { background: var(--tab-etc-bg);   color: var(--tab-etc);   border-color: var(--tab-etc);   box-shadow: 0 2px 6px rgba(31,143,78,0.2); }
+.tab-btn[data-category="bong1"].active     { background: var(--tab-bon1-bg);  color: var(--tab-bon1);  border-color: var(--tab-bon1);  box-shadow: 0 2px 6px rgba(99,110,114,0.2); }
+.tab-btn[data-category="bong2"].active     { background: var(--tab-bon2-bg);  color: var(--tab-bon2);  border-color: var(--tab-bon2);  box-shadow: 0 2px 6px rgba(125,60,152,0.2); }
+.tab-btn[data-category="bong3"].active     { background: var(--tab-bon3-bg);  color: var(--tab-bon3);  border-color: var(--tab-bon3);  box-shadow: 0 2px 6px rgba(202,111,30,0.2); }
 
 /* ── SEARCH ── */
 .search-bar {
@@ -181,9 +178,9 @@ html, body {
   top: calc(var(--header-h) + var(--tab-h));
   left: 0; width: 100%;
   height: var(--search-h);
-  background: #FFFFFF;
-  border-bottom: 1px solid #E5DDD6;
-  padding: 9px 12px;
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  padding: 8px 12px;
   z-index: 85;
 }
 
@@ -194,31 +191,31 @@ html, body {
 
 .search-icon {
   position: absolute;
-  left: 12px;
+  left: 13px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--text-hint);
-  font-size: 13px;
+  color: var(--text-sub);
+  font-size: 14px;
   pointer-events: none;
 }
 
 .search-input {
   width: 100%;
   height: 38px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: #FFFFFF;
-  padding: 0 12px 0 36px;
+  border: 2px solid var(--border);
+  border-radius: 9px;
+  background: var(--bg);
+  padding: 0 12px 0 38px;
   font-size: 14px;
   color: var(--text-main);
   font-family: 'Noto Sans KR', sans-serif;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
-.search-input::placeholder { color: var(--text-hint); }
+.search-input::placeholder { color: var(--text-sub); font-size: 13px; }
 .search-input:focus {
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(59,91,219,0.12);
+  box-shadow: 0 0 0 3px rgba(139,94,60,0.13);
   background: var(--white);
 }
 
@@ -241,7 +238,7 @@ html, body {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 14px 14px;
+  padding: 13px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -251,7 +248,7 @@ html, body {
   box-shadow: var(--shadow-sm);
 }
 .prayer-item:active { transform: scale(0.99); box-shadow: none; }
-.prayer-item:hover { border-color: #C7D2FE; box-shadow: 0 2px 8px rgba(59,91,219,0.08); }
+.prayer-item:hover { border-color: #C4A882; box-shadow: 0 2px 8px rgba(139,94,60,0.10); }
 
 .prayer-item-left {
   display: flex;
@@ -266,11 +263,11 @@ html, body {
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: var(--primary-light);
+  background: var(--icon-bg, var(--primary-light));
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
+  color: var(--icon-color, var(--primary));
   font-size: 13px;
 }
 
@@ -1046,12 +1043,22 @@ html, body {
               ]
         };
 
+const CATEGORY_STYLE = {
+  favorites: { bg: 'var(--tab-fav-bg)',   color: 'var(--tab-fav)',   icon: 'fa-star' },
+  aim:       { bg: 'var(--tab-aim-bg)',   color: 'var(--tab-aim)',   icon: 'fa-cross' },
+  basic:     { bg: 'var(--tab-basic-bg)', color: 'var(--tab-basic)', icon: 'fa-church' },
+  special:   { bg: 'var(--tab-spec-bg)',  color: 'var(--tab-spec)',  icon: 'fa-hands-praying' },
+  etc:       { bg: 'var(--tab-etc-bg)',   color: 'var(--tab-etc)',   icon: 'fa-book-open' },
+  bong1:     { bg: 'var(--tab-bon1-bg)',  color: 'var(--tab-bon1)',  icon: 'fa-dove' },
+  bong2:     { bg: 'var(--tab-bon2-bg)',  color: 'var(--tab-bon2)',  icon: 'fa-circle-dot' },
+  bong3:     { bg: 'var(--tab-bon3-bg)',  color: 'var(--tab-bon3)',  icon: 'fa-person-walking' },
+};
+
 const listEl = document.getElementById('prayer-list');
 const tabBtns = document.querySelectorAll('.tab-btn');
 const searchInput = document.getElementById('searchInput');
 const detailView = document.getElementById('detail-view');
 const tabContainer = document.querySelector('.tab-container');
-
 
 let isTouching = false;
 let startXTouch;
@@ -1069,15 +1076,11 @@ tabContainer.addEventListener('touchend', () => {
 
 tabContainer.addEventListener('touchmove', (e) => {
   if (!isTouching) return;
-
   const x = e.touches[0].pageX - tabContainer.offsetLeft;
   const walk = (x - startXTouch) * 1.5;
-
   tabContainer.scrollLeft = scrollLeftTouch - walk;
 });
 
-
-  
 let currentCategory = 'aim';
 let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
@@ -1087,45 +1090,40 @@ function normalizeText(t) {
 
 function toggleFavorite(id, e) {
   e.stopPropagation();
-
   if (favorites.includes(id)) {
     favorites = favorites.filter(f => f !== id);
   } else {
     favorites.push(id);
   }
-
   localStorage.setItem('favorites', JSON.stringify(favorites));
   renderList(currentCategory);
 }
 
 function scrollActiveTabIntoView(activeBtn) {
   if (!tabContainer || !activeBtn) return;
-
   const containerWidth = tabContainer.clientWidth;
   const tabLeft = activeBtn.offsetLeft;
   const tabWidth = activeBtn.offsetWidth;
-
   let targetScroll = tabLeft - (containerWidth / 2) + (tabWidth / 2);
-
   const maxScroll = tabContainer.scrollWidth - containerWidth;
   if (targetScroll < 0) targetScroll = 0;
   if (targetScroll > maxScroll) targetScroll = maxScroll;
-
-  tabContainer.scrollTo({
-    left: targetScroll,
-    behavior: 'smooth'
-  });
+  tabContainer.scrollTo({ left: targetScroll, behavior: 'smooth' });
 }
 
 function setActiveTab(category) {
   tabBtns.forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-category') === category);
   });
-
   const activeBtn = document.querySelector(`.tab-btn[data-category="${category}"]`);
-  if (activeBtn) {
-    scrollActiveTabIntoView(activeBtn);
+  if (activeBtn) scrollActiveTabIntoView(activeBtn);
+}
+
+function getCategoryForPrayer(id) {
+  for (const k in prayerData) {
+    if (prayerData[k].find(p => p.id === id)) return k;
   }
+  return 'aim';
 }
 
 function renderList(category) {
@@ -1145,38 +1143,32 @@ function renderList(category) {
     data = prayerData[category] || [];
   }
 
-  const filtered = kw
-    ? data.filter(p => normalizeText(p.title).includes(kw))
-    : data;
+  const filtered = kw ? data.filter(p => normalizeText(p.title).includes(kw)) : data;
 
   if (filtered.length === 0) {
     listEl.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon"><i class="fa-solid fa-dove"></i></div>
-        ${
-          category === 'favorites'
-            ? '즐겨찾기한 기도문이 없습니다.'
-            : kw
-            ? '검색 결과가 없습니다.'
-            : '등록된 기도문이 없습니다.'
-        }
-      </div>
-    `;
+        ${category === 'favorites' ? '즐겨찾기한 기도문이 없습니다.' : kw ? '검색 결과가 없습니다.' : '등록된 기도문이 없습니다.'}
+      </div>`;
     return;
   }
 
   filtered.forEach(prayer => {
+    const cat = (category === 'favorites' || kw) ? getCategoryForPrayer(prayer.id) : category;
+    const style = CATEGORY_STYLE[cat] || CATEGORY_STYLE.aim;
+
     const li = document.createElement('li');
     li.className = 'prayer-item';
-
     li.onclick = () => {
       searchInput.value = '';
       window.location.hash = `#prayer-${prayer.id}`;
     };
-
     li.innerHTML = `
       <div class="prayer-item-left">
-        <div class="prayer-icon-dot"><i class="fa-solid fa-cross"></i></div>
+        <div class="prayer-icon-dot" style="background:${style.bg};color:${style.color}">
+          <i class="fa-solid ${style.icon}"></i>
+        </div>
         <div class="prayer-title">${prayer.title}</div>
       </div>
       <div class="prayer-item-right">
@@ -1185,10 +1177,7 @@ function renderList(category) {
           <i class="fa-solid fa-star"></i>
         </button>
         <i class="fa-solid fa-chevron-right chevron"></i>
-      </div>
-    `;
-
-    
+      </div>`;
     listEl.appendChild(li);
   });
 }
@@ -1196,37 +1185,23 @@ function renderList(category) {
 tabBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     currentCategory = btn.getAttribute('data-category');
-
-    // 검색 초기화
     searchInput.value = '';
-
-    // 상세보기 닫기
     window.location.hash = '';
     detailView.classList.remove('show');
-
-    // 활성 탭 이동
     setActiveTab(currentCategory);
-
-    // 리스트 다시 렌더링
     renderList(currentCategory);
-
-    // 항상 새 탭의 맨 위 항목부터 보이게
     requestAnimationFrame(() => {
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-
       const listView = document.getElementById('list-view');
-      if (listView) {
-        listView.scrollIntoView({ block: 'start', behavior: 'auto' });
-      }
+      if (listView) listView.scrollIntoView({ block: 'start', behavior: 'auto' });
     });
   });
 });
 
 searchInput.addEventListener('input', () => {
   renderList(currentCategory);
-
   requestAnimationFrame(() => {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
@@ -1236,21 +1211,17 @@ searchInput.addEventListener('input', () => {
 
 function handleRouting() {
   const hash = window.location.hash;
-
   if (hash.startsWith('#prayer-')) {
     const id = hash.replace('#prayer-', '');
     let found = null;
-
     for (const k in prayerData) {
       found = prayerData[k].find(p => p.id === id);
       if (found) break;
     }
-
     if (found) {
       document.getElementById('detail-title').innerText = found.title;
       document.getElementById('detail-content').innerHTML = found.content;
       detailView.classList.add('show');
-
       requestAnimationFrame(() => {
         detailView.scrollTop = 0;
         window.scrollTo(0, 0);
@@ -1269,12 +1240,9 @@ window.addEventListener('load', () => {
   setActiveTab(currentCategory);
   renderList(currentCategory);
   handleRouting();
-
   requestAnimationFrame(() => {
     const listView = document.getElementById('list-view');
-    if (listView) {
-      listView.scrollIntoView({ block: 'start', behavior: 'auto' });
-    }
+    if (listView) listView.scrollIntoView({ block: 'start', behavior: 'auto' });
   });
 });
 </script>
