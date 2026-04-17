@@ -267,7 +267,16 @@ border-radius: 16px;
     font-size: 14px;
     opacity: 0.9;
 }
-        
+
+   .prayer-title i,
+.prayer-title svg {
+    color: #8B5E3C !important;
+    fill: #8B5E3C !important;
+}
+
+
+
+   
 </style>
 </head>
 <body>
@@ -879,8 +888,8 @@ function getIcon(title) {
                 const li = document.createElement('li');
                 li.className = 'prayer-item';
                 li.onclick = () => { window.location.hash = `#prayer-${prayer.id}`; };
-                li.innerHTML = `
-
+               
+li.innerHTML = `
 <div class="prayer-title">
     <i class="fa-solid ${getIcon(prayer.title)}"></i>
     ${prayer.title}
@@ -888,6 +897,7 @@ function getIcon(title) {
 <div class="prayer-icon">
     <i class="fa-solid fa-chevron-right"></i>
 </div>
+`;
 
 .prayer-title i,
 .prayer-title svg {
