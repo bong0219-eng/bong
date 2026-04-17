@@ -110,21 +110,27 @@ html, body {
 .tab-container {
   position: fixed;
   top: var(--header-h);
-  left: 0; width: 100%;
+  left: 0;
+  width: 100%;
   height: var(--tab-h);
-  background: #FFFFFF;
-  border-bottom: none;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 0 12px;
   overflow-x: auto;
   overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   z-index: 90;
   box-shadow: var(--shadow-sm);
 }
-.tab-container::-webkit-scrollbar { display: none; }
+
+.tab-container::-webkit-scrollbar {
+  display: none;
+}
 
 .tab-btn {
   flex: 0 0 auto;
@@ -142,7 +148,11 @@ html, body {
   transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
   letter-spacing: -0.02em;
 }
-.tab-btn:active { transform: scale(0.97); }
+
+.tab-btn:active {
+  transform: scale(0.97);
+}
+
 .tab-btn.active {
   background: var(--primary);
   color: #fff;
@@ -1024,17 +1034,57 @@ html, body {
 const listEl = document.getElementById('prayer-list');
 const tabBtns = document.querySelectorAll('.tab-btn');
 const searchInput = document.getElementById('searchInput');
+const detailView = document.getElementById('detail-view');
+const tabContainer = document.querySelector('.tab-container');
+
 let currentCategory = 'aim';
 let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
-function normalizeText(t) { return (t||'').replace(/\s+/g,'').toLowerCase(); }
+function normalizeText(t) {
+  return (t || '').replace(/\s+/g, '').toLowerCase();
+}
 
 function toggleFavorite(id, e) {
   e.stopPropagation();
-  if (favorites.includes(id)) favorites = favorites.filter(f=>f!==id);
-  else favorites.push(id);
+
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(f => f !== id);
+  } else {
+    favorites.push(id);
+  }
+
   localStorage.setItem('favorites', JSON.stringify(favorites));
   renderList(currentCategory);
+}
+
+function scrollActiveTabIntoView(activeBtn) {
+  if (!tabContainer || !activeBtn) return;
+
+  const containerWidth = tabContainer.clientWidth;
+  const tabLeft = activeBtn.offsetLeft;
+  const tabWidth = activeBtn.offsetWidth;
+
+  let targetScroll = tabLeft - (containerWidth / 2) + (tabWidth / 2);
+
+  const maxScroll = tabContainer.scrollWidth - containerWidth;
+  if (targetScroll < 0) targetScroll = 0;
+  if (targetScroll > maxScroll) targetScroll = maxScroll;
+
+  tabContainer.scrollTo({
+    left: targetScroll,
+    behavior: 'smooth'
+  });
+}
+
+function setActiveTab(category) {
+  tabBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-category') === category);
+  });
+
+  const activeBtn = document.querySelector(`.tab-btn[data-category="${category}"]`);
+  if (activeBtn) {
+    scrollActiveTabIntoView(activeBtn);
+  }
 }
 
 function renderList(category) {
@@ -1043,73 +1093,85 @@ function renderList(category) {
   let data = [];
 
   if (category === 'favorites') {
-    for (const k in prayerData) data = data.concat(prayerData[k].filter(p=>favorites.includes(p.id)));
+    for (const k in prayerData) {
+      data = data.concat(prayerData[k].filter(p => favorites.includes(p.id)));
+    }
   } else if (kw) {
-    for (const k in prayerData) data = data.concat(prayerData[k]);
+    for (const k in prayerData) {
+      data = data.concat(prayerData[k]);
+    }
   } else {
     data = prayerData[category] || [];
   }
 
-  const filtered = kw ? data.filter(p=>normalizeText(p.title).includes(kw)) : data;
+  const filtered = kw
+    ? data.filter(p => normalizeText(p.title).includes(kw))
+    : data;
 
   if (filtered.length === 0) {
-    listEl.innerHTML = `<div class="empty-state"><div class="empty-state-icon"><i class="fa-solid fa-dove"></i></div>${
-      category==='favorites' ? '즐겨찾기한 기도문이 없습니다.' :
-      kw ? '검색 결과가 없습니다.' : '등록된 기도문이 없습니다.'
-    }</div>`;
+    listEl.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon"><i class="fa-solid fa-dove"></i></div>
+        ${
+          category === 'favorites'
+            ? '즐겨찾기한 기도문이 없습니다.'
+            : kw
+            ? '검색 결과가 없습니다.'
+            : '등록된 기도문이 없습니다.'
+        }
+      </div>
+    `;
     return;
   }
 
   filtered.forEach(prayer => {
     const li = document.createElement('li');
     li.className = 'prayer-item';
-   li.onclick = () => {
-  searchInput.value = '';
-  window.location.hash = `#prayer-${prayer.id}`;
-};
+
+    li.onclick = () => {
+      searchInput.value = '';
+      window.location.hash = `#prayer-${prayer.id}`;
+    };
+
     li.innerHTML = `
       <div class="prayer-item-left">
         <div class="prayer-icon-dot"><i class="fa-solid fa-cross"></i></div>
         <div class="prayer-title">${prayer.title}</div>
       </div>
       <div class="prayer-item-right">
-        <button class="star-btn ${favorites.includes(prayer.id)?'active':''}"
-          onclick="toggleFavorite('${prayer.id}',event)">
+        <button class="star-btn ${favorites.includes(prayer.id) ? 'active' : ''}"
+          onclick="toggleFavorite('${prayer.id}', event)">
           <i class="fa-solid fa-star"></i>
         </button>
         <i class="fa-solid fa-chevron-right chevron"></i>
-      </div>`;
+      </div>
+    `;
+
     listEl.appendChild(li);
   });
 }
 
 tabBtns.forEach(btn => {
-  btn.addEventListener('click', e => {
-    tabBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+  btn.addEventListener('click', () => {
     currentCategory = btn.getAttribute('data-category');
 
     searchInput.value = '';
     window.location.hash = '';
 
+    setActiveTab(currentCategory);
     renderList(currentCategory);
 
     window.scrollTo({ top: 0, behavior: 'auto' });
-
-    const tabContainer = document.querySelector('.tab-container');
-    if (tabContainer) {
-      tabContainer.scrollTo({ left: 0, behavior: 'auto' });
-    }
   });
 });
 
-searchInput.addEventListener('input', () => renderList(currentCategory));
-
-renderList(currentCategory);
+searchInput.addEventListener('input', () => {
+  renderList(currentCategory);
+  window.scrollTo({ top: 0, behavior: 'auto' });
+});
 
 function handleRouting() {
   const hash = window.location.hash;
-  const dv = document.getElementById('detail-view');
 
   if (hash.startsWith('#prayer-')) {
     const id = hash.replace('#prayer-', '');
@@ -1123,21 +1185,25 @@ function handleRouting() {
     if (found) {
       document.getElementById('detail-title').innerText = found.title;
       document.getElementById('detail-content').innerHTML = found.content;
-      dv.classList.add('show');
+      detailView.classList.add('show');
 
-      dv.scrollTop = 0;
+      detailView.scrollTop = 0;
       window.scrollTo(0, 0);
     } else {
-      dv.classList.remove('show');
+      detailView.classList.remove('show');
     }
   } else {
-    dv.classList.remove('show');
+    detailView.classList.remove('show');
     window.scrollTo(0, 0);
   }
 }
 
 window.addEventListener('hashchange', handleRouting);
-window.addEventListener('load', handleRouting);
+window.addEventListener('load', () => {
+  setActiveTab(currentCategory);
+  renderList(currentCategory);
+  handleRouting();
+});
 </script>
 </body>
 </html>
