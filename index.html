@@ -10,48 +10,48 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root {
---bg-color: #F7F4F1;
---white: #FFFFFF;
---text-main: #2B2B2B;
---text-sub: #7A6E66;
---primary-pastel: #EDE3DB;
---primary-active: #6B4F3A;
---accent-color: #8B5E3C;
---border-color: #E5DDD6;
---header-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    --bg-color: #F7F4F1;
+    --white: #FFFFFF;
+    --text-main: #2B2B2B;
+    --text-sub: #7A6E66;
+    --primary-pastel: #EDE3DB;
+    --primary-active: #6B4F3A;
+    --accent-color: #8B5E3C;
+    --border-color: #E5DDD6;
+    --header-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-    * {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
--webkit-tap-highlight-color: transparent;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-color: #2B2B2B;
-background: #F7F4F1;
--webkit-text-size-adjust: 100%;
-text-rendering: optimizeLegibility;
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    color: #2B2B2B;
+    background: #F7F4F1;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
 }
 
 header {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 60px;
-display: flex;
-align-items: center;
-justify-content: center;
-background: linear-gradient(90deg, #6B4F3A, #8B5E3C);
-color: #fff;
-font-size: 18px;
-font-weight: 700;
-letter-spacing: -0.02em;
-z-index: 100;
-box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #6B4F3A, #8B5E3C);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .tab-container {
@@ -69,6 +69,10 @@ box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     scrollbar-width: none;
 }
 
+.tab-container::-webkit-scrollbar {
+    display: none;
+}
+
 .tab-btn {
     flex: 0 0 auto;
     min-width: 116px;
@@ -84,8 +88,26 @@ box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     white-space: nowrap;
 }
 
+.tab-btn:hover {
+    background-color: #F3EEE9;
+}
+
+.tab-btn.active {
+    background: #7B573D;
+    color: #fff;
+    border-color: #7B573D;
+    box-shadow: 0 4px 12px rgba(123,87,61,0.18);
+}
+
 #list-view {
     padding: 128px 16px 24px;
+}
+
+.prayer-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .prayer-item {
@@ -100,6 +122,21 @@ box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     align-items: flex-start;
     justify-content: space-between;
     gap: 14px;
+}
+
+.prayer-item:last-child {
+    min-height: 64px;
+    padding: 14px 20px;
+}
+
+.prayer-item:active {
+    transform: scale(0.99);
+}
+
+.prayer-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(80, 50, 30, 0.12);
+    border-color: #D6C2B5;
 }
 
 .prayer-title {
@@ -121,7 +158,6 @@ box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     flex: 0 0 18px;
     width: 18px;
     height: 18px;
-    margin-right: 0;
     margin-top: 3px;
     color: #8B5E3C;
     fill: #8B5E3C;
@@ -143,119 +179,105 @@ box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 #detail-view {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100vh;
-background-color: var(--bg-color);
-z-index: 200;
-transform: translateX(100%);
-transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-overflow-y: auto;
-display: flex;
-flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--bg-color);
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 #detail-view.show {
-transform: translateX(0);
+    transform: translateX(0);
 }
 
 .detail-header {
-position: sticky;
-top: 0;
-width: 100%;
-min-height: 60px;
-background-color: rgba(255,255,255,0.97);
-backdrop-filter: blur(8px);
-display: flex;
-align-items: center;
-padding: 0 16px;
-box-shadow: var(--header-shadow);
-border-bottom: 1px solid #EEE7E1;
-z-index: 210;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    min-height: 60px;
+    background-color: rgba(255,255,255,0.97);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    box-shadow: var(--header-shadow);
+    border-bottom: 1px solid #EEE7E1;
+    z-index: 210;
 }
 
-
-
 .detail-title {
-flex: 1;
-text-align: center;
-font-size: 16px;
-font-weight: 700;
-color: var(--text-main);
-margin-right: 20px;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-right: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .detail-content {
-padding: 28px 24px;
-font-size: 16px;
-line-height: 2.0;
-color: #2B2B2B;
-background: #FCFAF8;
-margin: 16px;
-border-radius: 18px;
-border: 1px solid #E6DDD6;
-box-shadow: 0 6px 20px rgba(80,50,30,0.06);
+    padding: 28px 24px;
+    font-size: 16px;
+    line-height: 2.0;
+    color: #2B2B2B;
+    background: #FCFAF8;
+    margin: 16px;
+    border-radius: 18px;
+    border: 1px solid #E6DDD6;
+    box-shadow: 0 6px 20px rgba(80,50,30,0.06);
 }
 
 .detail-content p {
-margin-bottom: 18px;
-text-align: justify;
-word-break: keep-all;
+    margin-bottom: 18px;
+    text-align: justify;
+    word-break: keep-all;
 }
 
 .detail-content .rubric {
-color: #8B5E3C;
-font-size: 13px;
-font-weight: 700;
-letter-spacing: 0.5px;
-margin: 20px 0 10px;
-display: block;
-text-transform: uppercase;
+    color: #8B5E3C;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 20px 0 10px;
+    display: block;
+    text-transform: uppercase;
 }
 
 .detail-content .bold {
-font-weight: 700;
-color: #3A2E25;
+    font-weight: 700;
+    color: #3A2E25;
 }
 
 .detail-content .symbol {
-color: var(--accent-color);
-font-weight: 700;
+    color: var(--accent-color);
+    font-weight: 700;
 }
 
 .detail-content .align-right {
-text-align: right;
-font-size: 14px;
-color: #7A6E66;
-margin-top: 20px;
+    text-align: right;
+    font-size: 14px;
+    color: #7A6E66;
+    margin-top: 20px;
 }
 
 .empty-state {
-text-align: center;
-padding: 56px 20px;
-color: var(--text-sub);
-font-size: 15px;
-background: #FCFAF8;
-border: 1px dashed #DDD6CF;
-border-radius: 16px;
+    text-align: center;
+    padding: 56px 20px;
+    color: var(--text-sub);
+    font-size: 15px;
+    background: #FCFAF8;
+    border: 1px dashed #DDD6CF;
+    border-radius: 16px;
 }
-
-
-.prayer-title i,
-.prayer-title svg {
-    margin-right: 8px;
-    color: #8B5E3C;
-    fill: #8B5E3C;
-    font-size: 14px;
-    opacity: 0.9;
-}
-
-   
 </style>
 </head>
 <body>
@@ -280,6 +302,7 @@ border-radius: 16px;
 <div id="detail-view">
 <div class="detail-header">
 <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></button>
+  
 <div class="detail-title" id="detail-title">기도문</div>
 </div>
 <div class="detail-content" id="detail-content"></div>
