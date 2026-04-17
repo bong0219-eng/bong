@@ -88,50 +88,49 @@ html, body {
   position: fixed;
   top: 0; left: 0; width: 100%;
   height: var(--header-h);
-  background: linear-gradient(135deg, #B91CE0 0%, #7B2FF7 55%, #3B6EF5 100%);
+  background: linear-gradient(135deg, #1F2A44, #2F4167);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 14px;
   z-index: 100;
-  box-shadow: 0 2px 12px rgba(100,30,200,0.30);
 }
  
 .header-brand { display: flex; align-items: center; gap: 10px; }
  
 .header-cross {
-  width: 32px; height: 32px;
-  background: rgba(255,255,255,0.20);
-  border: 1.5px solid rgba(255,255,255,0.38);
+  width: 30px; height: 30px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 14px;
+  color: #fff; font-size: 13px;
 }
  
 .header-title {
   font-size: var(--fs-header);
   font-weight: 700;
   color: #fff;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
  
 .header-subtitle {
   font-size: 9px; font-weight: 500;
-  color: rgba(255,255,255,0.62);
+  color: rgba(255,255,255,0.52);
   letter-spacing: 0.12em; margin-top: 1px;
 }
  
 /* 굿뉴스 — 카카오 노랑 */
 .header-link {
-  height: 32px;
+  height: 30px;
   border-radius: 7px;
   display: flex; align-items: center; gap: 5px;
   color: #3C1E00;
   background: #FEE500;
   border: none; text-decoration: none;
-  font-size: var(--fs-sub); font-weight: 700;
-  padding: 0 10px; white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  font-size: 11px; font-weight: 700;
+  padding: 0 9px; white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
   transition: filter .15s;
 }
 .header-link:hover { filter: brightness(1.06); }
@@ -141,10 +140,11 @@ html, body {
   position: fixed;
   top: var(--header-h); left: 0; width: 100%;
   height: var(--tab-h);
-  display: flex; align-items: center; gap: 6px;
-  padding: 0 10px;
-  background: var(--surface);
-  border-bottom: 1.5px solid var(--border);
+  display: flex; align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  background: linear-gradient(135deg, #1F2A44, #2F4167);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   overflow-x: auto; overflow-y: hidden;
   white-space: nowrap;
   touch-action: pan-x;
@@ -152,34 +152,34 @@ html, body {
   overscroll-behavior-x: contain;
   scrollbar-width: none;
   z-index: 90;
-  box-shadow: var(--shadow-sm);
 }
 .tab-container::-webkit-scrollbar { display: none; }
  
 .tab-btn {
   flex: 0 0 auto;
-  height: 33px; padding: 0 12px;
-  border-radius: 7px;
-  border: 1.5px solid var(--border);
-  background: var(--surface-sub);
-  color: var(--text-sub);
-  font-size: var(--fs-tab); font-weight: 600;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.78);
+  font-size: var(--fs-tab);
+  font-weight: 600;
   font-family: 'Noto Sans KR', sans-serif;
   white-space: nowrap; cursor: pointer;
-  transition: background .15s, color .15s, border-color .15s, box-shadow .15s;
+  transition: background .15s, color .15s, border-color .15s;
   letter-spacing: -0.02em;
   touch-action: manipulation;
 }
-.tab-btn:active { transform: scale(0.96); }
+.tab-btn:active { transform: scale(0.97); }
  
-.tab-btn[data-category="favorites"].active { background:var(--c-fav-bg); color:var(--c-fav-dk); border-color:var(--c-fav); box-shadow:0 2px 8px rgba(232,120,12,.22); }
-.tab-btn[data-category="aim"].active       { background:var(--c-aim-bg); color:var(--c-aim-dk); border-color:var(--c-aim); box-shadow:0 2px 8px rgba(21,101,192,.25); }
-.tab-btn[data-category="basic"].active     { background:var(--c-bas-bg); color:var(--c-bas-dk); border-color:var(--c-bas); box-shadow:0 2px 8px rgba(88,72,212,.22); }
-.tab-btn[data-category="special"].active   { background:var(--c-spc-bg); color:var(--c-spc-dk); border-color:var(--c-spc); box-shadow:0 2px 8px rgba(8,120,200,.22); }
-.tab-btn[data-category="etc"].active       { background:var(--c-etc-bg); color:var(--c-etc-dk); border-color:var(--c-etc); box-shadow:0 2px 8px rgba(10,158,80,.22); }
-.tab-btn[data-category="bong1"].active     { background:var(--c-bo1-bg); color:var(--c-bo1-dk); border-color:var(--c-bo1); box-shadow:0 2px 8px rgba(84,110,122,.22); }
-.tab-btn[data-category="bong2"].active     { background:var(--c-bo2-bg); color:var(--c-bo2-dk); border-color:var(--c-bo2); box-shadow:0 2px 8px rgba(142,36,170,.22); }
-.tab-btn[data-category="bong3"].active     { background:var(--c-bo3-bg); color:var(--c-bo3-dk); border-color:var(--c-bo3); box-shadow:0 2px 8px rgba(200,90,0,.22); }
+/* 활성 탭 — 단일 기준으로 통일 */
+.tab-btn.active {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.38);
+  color: #ffffff;
+  font-weight: 700;
+}
  
 /* ══ SEARCH ══ */
 .search-bar {
@@ -976,6 +976,7 @@ html, body {
            
         };
 
+
 const CATEGORY_STYLE = {
   favorites: { bg:'#FFF0DC', color:'#E8780C', icon:'fa-star',           accent:'#E8780C' },
   aim:       { bg:'#E3F0FF', color:'#1565C0', icon:'fa-cross',          accent:'#1565C0' },
@@ -1168,3 +1169,4 @@ window.addEventListener('load', ()=>{
 </script>
 </body>
 </html>
+ 
