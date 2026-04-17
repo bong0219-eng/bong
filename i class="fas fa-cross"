@@ -20,7 +20,7 @@
 --header-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-* {
+    * {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
@@ -879,14 +879,21 @@ function getIcon(title) {
                 li.className = 'prayer-item';
                 li.onclick = () => { window.location.hash = `#prayer-${prayer.id}`; };
                 li.innerHTML = `
-    <div class="prayer-title">
-        <i class="fas ${getIcon(prayer.title)}"></i>
-        ${prayer.title}
-    </div>
-    <div class="prayer-icon">
-        <i class="fas fa-chevron-right"></i>
-    </div>
-`;
+
+<div class="prayer-title">
+    <i class="fa-solid ${getIcon(prayer.title)}"></i>
+    ${prayer.title}
+</div>
+<div class="prayer-icon">
+    <i class="fa-solid fa-chevron-right"></i>
+</div>
+
+.prayer-title i,
+.prayer-title svg {
+    color: #8B5E3C !important;
+    fill: #8B5E3C !important;
+}
+
                 listContainer.appendChild(li);
             });
         }
