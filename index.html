@@ -315,6 +315,21 @@ header {
     border: 1px dashed #DDD6CF;
     border-radius: 16px;
 }
+
+.fa-star {
+    color: #CFC6BE;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.fa-star.active-star {
+    color: #B7791F;
+}
+
+.fa-star:active {
+    transform: scale(0.9);
+}
 </style>
 </head>
 <body>
@@ -322,6 +337,7 @@ header {
 <header>기도문</header>
 
 <div class="tab-container">
+    <button class="tab-btn" data-category="favorites">⭐ 즐겨찾기</button>
     <button class="tab-btn active" data-category="aim">교구 인준 기도</button>
     <button class="tab-btn" data-category="basic">주요 기도</button>
     <button class="tab-btn" data-category="special">특수 기도</button>
@@ -329,6 +345,7 @@ header {
     <button class="tab-btn" data-category="bong1">위령기도</button>
     <button class="tab-btn" data-category="bong2">레지오 마리애</button>
     <button class="tab-btn" data-category="bong3">십자가의 길</button>
+
 </div>
 
 <div class="search-box">
@@ -908,9 +925,10 @@ header {
 
 const listContainer = document.getElementById('prayer-list');
 const tabBtns = document.querySelectorAll('.tab-btn');
-const searchInput = document.getElementById('searchInput'); // ✅ 추가
+const searchInput = document.getElementById('searchInput');
 
 let currentCategory = 'aim';
+let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
 function getIcon(title) {
     if (title.includes('성모')) return 'fa-hands-praying';
@@ -919,8 +937,19 @@ function getIcon(title) {
     if (title.includes('예수')) return 'fa-book-bible';
     return 'fa-cross';
 }
-    function normalizeText(text) {
+
+function normalizeText(text) {
     return (text || '').replace(/\s+/g, '').toLowerCase();
+}
+
+function toggleFavorite(id) {
+    if (favorites.includes(id)) {
+        favorites = favorites.filter(f => f !== id);
+    } else {
+        favorites.push(id);
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    renderList(currentCategory);
 }
 
 function renderList(category) {
@@ -929,8 +958,13 @@ function renderList(category) {
 
     let dataToSearch = [];
 
-    // 🔥 검색 중이면 전체 데이터
-    if (keyword) {
+    if (category === 'favorites') {
+        for (const key in prayerData) {
+            dataToSearch = dataToSearch.concat(
+                prayerData[key].filter(prayer => favorites.includes(prayer.id))
+            );
+        }
+    } else if (keyword) {
         for (const key in prayerData) {
             dataToSearch = dataToSearch.concat(prayerData[key]);
         }
@@ -939,14 +973,16 @@ function renderList(category) {
     }
 
     if (!dataToSearch || dataToSearch.length === 0) {
-        listContainer.innerHTML = '<div class="empty-state">아직 등록된 기도문이 없습니다.</div>';
+        listContainer.innerHTML =
+            category === 'favorites'
+                ? '<div class="empty-state">⭐ 즐겨찾기가 없습니다.</div>'
+                : '<div class="empty-state">아직 등록된 기도문이 없습니다.</div>';
         return;
     }
 
     const filteredData = dataToSearch.filter(prayer => {
         if (!keyword) return true;
-        const title = normalizeText(prayer.title);
-        return title.includes(keyword);
+        return normalizeText(prayer.title).includes(keyword);
     });
 
     if (filteredData.length === 0) {
@@ -967,8 +1003,14 @@ function renderList(category) {
                 <i class="fa-solid ${getIcon(prayer.title)}"></i>
                 ${prayer.title}
             </div>
-            <div class="prayer-icon">
-                <i class="fa-solid fa-chevron-right"></i>
+
+            <div style="display:flex; gap:10px; align-items:center;">
+                <i class="fa-solid fa-star ${favorites.includes(prayer.id) ? 'active-star' : ''}"
+                   onclick="event.stopPropagation(); toggleFavorite('${prayer.id}')"></i>
+
+                <div class="prayer-icon">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </div>
             </div>
         `;
 
@@ -985,6 +1027,12 @@ tabBtns.forEach(btn => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });
+
+if (searchInput) {
+    searchInput.addEventListener('input', () => {
+        renderList(currentCategory);
+    });
+}
 
 renderList(currentCategory);
 
@@ -1015,11 +1063,7 @@ function handleRouting() {
         detailView.classList.remove('show');
     }
 }
-if (searchInput) {
-    searchInput.addEventListener('input', () => {
-        renderList(currentCategory);
-    });
-}
+
 window.addEventListener('hashchange', handleRouting);
 window.addEventListener('load', handleRouting);
     </script>
