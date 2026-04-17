@@ -36,6 +36,12 @@ body {
     text-rendering: optimizeLegibility;
 }
 
+    
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 기도문 검색">
+</div>
+
+    
 header {
     position: fixed;
     top: 0;
@@ -110,10 +116,6 @@ header {
     z-index: 85;
 }
 
-#list-view {
-    padding: 182px 16px 24px;
-}
-
 .search-box input {
     width: 100%;
     height: 42px;
@@ -131,7 +133,7 @@ header {
 }
 
 #list-view {
-    padding: 190px 16px 24px;
+    padding: 182px 16px 24px;
 }
 
 .prayer-list {
@@ -140,7 +142,6 @@ header {
     flex-direction: column;
     gap: 12px;
 }
-
 
 .prayer-item {
     width: 100%;
@@ -155,7 +156,7 @@ header {
     justify-content: space-between;
     gap: 14px;
 }
-    
+
 .prayer-item:last-child {
     min-height: 64px;
     padding: 14px 20px;
@@ -181,10 +182,9 @@ header {
     font-weight: 700;
     line-height: 1.45;
     letter-spacing: -0.02em;
-    color: #2D2D2D;
+    color: #1F2937;
     word-break: keep-all;
 }
-
 
 .prayer-title i,
 .prayer-title svg {
@@ -197,6 +197,7 @@ header {
     font-size: 18px;
     opacity: 1;
 }
+
 .prayer-icon {
     flex: 0 0 22px;
     width: 22px;
@@ -207,7 +208,21 @@ header {
     color: #8B6A53;
     font-size: 18px;
     line-height: 1;
-    margin-top: 4px;
+}
+
+.fa-star {
+    color: #CFC6BE;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.fa-star.active-star {
+    color: #B7791F;
+}
+
+.fa-star:active {
+    transform: scale(0.9);
 }
 
 #detail-view {
@@ -269,7 +284,7 @@ header {
 .detail-content {
     padding: 28px 24px;
     font-size: 16px;
-    line-height: 2.0;
+    line-height: 1.9;
     color: #2B2B2B;
     background: #FCFAF8;
     margin: 16px;
@@ -278,8 +293,7 @@ header {
     box-shadow: 0 6px 20px rgba(80,50,30,0.06);
 }
 
-
-    .detail-content p {
+.detail-content p {
     margin-bottom: 18px;
     text-align: left;
     word-break: keep-all;
@@ -965,22 +979,19 @@ function renderList(category) {
 
     let dataToSearch = [];
 
-
-    
     if (category === 'favorites') {
-    for (const key in prayerData) {
-        dataToSearch = dataToSearch.concat(
-            prayerData[key].filter(prayer => favorites.includes(prayer.id))
-        );
+        for (const key in prayerData) {
+            dataToSearch = dataToSearch.concat(
+                prayerData[key].filter(prayer => favorites.includes(prayer.id))
+            );
+        }
+    } else if (keyword) {
+        for (const key in prayerData) {
+            dataToSearch = dataToSearch.concat(prayerData[key]);
+        }
+    } else {
+        dataToSearch = prayerData[category];
     }
-} else if (keyword) {
-    for (const key in prayerData) {
-        dataToSearch = dataToSearch.concat(prayerData[key]);
-    }
-} else {
-    dataToSearch = prayerData[category];
-}
-    
 
     if (!dataToSearch || dataToSearch.length === 0) {
         listContainer.innerHTML =
@@ -1028,20 +1039,16 @@ function renderList(category) {
     });
 }
 
-
-    
 tabBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
         tabBtns.forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
         currentCategory = e.target.getAttribute('data-category');
-
         renderList(currentCategory);
-
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });
-    
+
 if (searchInput) {
     searchInput.addEventListener('input', () => {
         renderList(currentCategory);
