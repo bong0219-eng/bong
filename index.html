@@ -145,8 +145,8 @@ header {
 
 .prayer-item {
     width: 100%;
-    min-height: 72px;
-    padding: 16px 20px;
+    min-height: 78px;
+    padding: 18px 20px;
     background: #FFFDFC;
     border: 1px solid #E1D7CF;
     border-radius: 18px;
@@ -158,8 +158,8 @@ header {
 }
 
 .prayer-item:last-child {
-    min-height: 64px;
-    padding: 14px 20px;
+    min-height: 78px;
+    padding: 18px 20px;
 }
 
 .prayer-item:active {
@@ -176,11 +176,11 @@ header {
     flex: 1;
     min-width: 0;
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
     font-size: 16px;
     font-weight: 700;
-    line-height: 1.45;
+    line-height: 1.4;
     letter-spacing: -0.02em;
     color: #1F2937;
     word-break: keep-all;
@@ -191,11 +191,14 @@ header {
     flex: 0 0 18px;
     width: 18px;
     height: 18px;
-    margin-top: 1px;
     color: #A55D3A;
     fill: #A55D3A;
     font-size: 18px;
     opacity: 1;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .prayer-icon {
@@ -337,20 +340,41 @@ header {
     border-radius: 16px;
 }
 
+.prayer-actions {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-left: 12px;
+}
+
 .fa-star {
     color: #CFC6BE;
-    font-size: 16px;
+    font-size: 18px;
     cursor: pointer;
     transition: color 0.2s ease, transform 0.2s ease;
+    width: 20px;
+    text-align: center;
 }
 
 .fa-star.active-star {
     color: #B7791F;
 }
 
-.fa-star:active {
-    transform: scale(0.9);
+.prayer-icon {
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8B6A53;
+    font-size: 18px;
+    line-height: 1;
 }
+
+
+    
 </style>
 </head>
 <body>
@@ -952,10 +976,6 @@ let currentCategory = 'aim';
 let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
 function getIcon(title) {
-    if (title.includes('성모')) return 'fa-hands-praying';
-    if (title.includes('묵주')) return 'fa-beads';
-    if (title.includes('성인')) return 'fa-cross';
-    if (title.includes('예수')) return 'fa-book-bible';
     return 'fa-cross';
 }
 
@@ -1019,21 +1039,21 @@ function renderList(category) {
             window.location.hash = `#prayer-${prayer.id}`;
         };
 
-        li.innerHTML = `
-            <div class="prayer-title">
-                <i class="fa-solid ${getIcon(prayer.title)}"></i>
-                ${prayer.title}
-            </div>
+       li.innerHTML = `
+    <div class="prayer-title">
+        <i class="fa-solid ${getIcon(prayer.title)}"></i>
+        ${prayer.title}
+    </div>
 
-            <div style="display:flex; gap:10px; align-items:center;">
-                <i class="fa-solid fa-star ${favorites.includes(prayer.id) ? 'active-star' : ''}"
-                   onclick="event.stopPropagation(); toggleFavorite('${prayer.id}')"></i>
+    <div class="prayer-actions">
+        <i class="fa-solid fa-star ${favorites.includes(prayer.id) ? 'active-star' : ''}"
+           onclick="event.stopPropagation(); toggleFavorite('${prayer.id}')"></i>
 
-                <div class="prayer-icon">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </div>
-            </div>
-        `;
+        <div class="prayer-icon">
+            <i class="fa-solid fa-chevron-right"></i>
+        </div>
+    </div>
+`;
 
         listContainer.appendChild(li);
     });
