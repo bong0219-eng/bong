@@ -129,7 +129,9 @@ html, body {
   z-index: 90;
   box-shadow: var(--shadow-sm);
 }
+  
 
+  
 .tab-container::-webkit-scrollbar {
   display: none;
 }
@@ -1157,19 +1159,41 @@ tabBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     currentCategory = btn.getAttribute('data-category');
 
+    // 검색 초기화
     searchInput.value = '';
-    window.location.hash = '';
 
+    // 상세보기 닫기
+    window.location.hash = '';
+    detailView.classList.remove('show');
+
+    // 활성 탭 이동
     setActiveTab(currentCategory);
+
+    // 리스트 다시 렌더링
     renderList(currentCategory);
 
-    window.scrollTo({ top: 0, behavior: 'auto' });
+    // 항상 새 탭의 맨 위 항목부터 보이게
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+
+      const listView = document.getElementById('list-view');
+      if (listView) {
+        listView.scrollIntoView({ block: 'start', behavior: 'auto' });
+      }
+    });
   });
 });
 
 searchInput.addEventListener('input', () => {
   renderList(currentCategory);
-  window.scrollTo({ top: 0, behavior: 'auto' });
+
+  requestAnimationFrame(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  });
 });
 
 function handleRouting() {
@@ -1189,8 +1213,10 @@ function handleRouting() {
       document.getElementById('detail-content').innerHTML = found.content;
       detailView.classList.add('show');
 
-      detailView.scrollTop = 0;
-      window.scrollTo(0, 0);
+      requestAnimationFrame(() => {
+        detailView.scrollTop = 0;
+        window.scrollTo(0, 0);
+      });
     } else {
       detailView.classList.remove('show');
     }
@@ -1205,6 +1231,13 @@ window.addEventListener('load', () => {
   setActiveTab(currentCategory);
   renderList(currentCategory);
   handleRouting();
+
+  requestAnimationFrame(() => {
+    const listView = document.getElementById('list-view');
+    if (listView) {
+      listView.scrollIntoView({ block: 'start', behavior: 'auto' });
+    }
+  });
 });
 </script>
 </body>
