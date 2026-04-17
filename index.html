@@ -69,10 +69,6 @@ header {
     scrollbar-width: none;
 }
 
-    <div class="search-box">
-    <input type="text" id="searchInput" placeholder="🔍 기도문 검색">
-</div>
-
 .tab-container::-webkit-scrollbar {
     display: none;
 }
@@ -103,8 +99,35 @@ header {
     box-shadow: 0 4px 12px rgba(123,87,61,0.18);
 }
 
+.search-box {
+    position: fixed;
+    top: 128px;
+    left: 0;
+    width: 100%;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.96);
+    border-bottom: 1px solid #E7DDD6;
+    z-index: 85;
+}
+
+.search-box input {
+    width: 100%;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid #E1D7CF;
+    background: #FFFDFC;
+    padding: 0 14px;
+    font-size: 14px;
+    color: #2B2B2B;
+    outline: none;
+}
+
+.search-box input::placeholder {
+    color: #9A8F86;
+}
+
 #list-view {
-    padding: 168px 16px 24px;
+    padding: 190px 16px 24px;
 }
 
 .prayer-list {
@@ -216,6 +239,16 @@ header {
     z-index: 210;
 }
 
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-main);
+    cursor: pointer;
+    padding: 10px;
+    margin-left: -10px;
+}
+
 .detail-title {
     flex: 1;
     text-align: center;
@@ -282,34 +315,6 @@ header {
     border: 1px dashed #DDD6CF;
     border-radius: 16px;
 }
-
-
-    .search-box {
-    position: fixed;
-    top: 108px; /* header(60) + tab(약48) */
-    left: 0;
-    width: 100%;
-    padding: 10px 16px;
-    background: rgba(255,255,255,0.96);
-    border-bottom: 1px solid #E7DDD6;
-    z-index: 85;
-}
-
-.search-box input {
-    width: 100%;
-    height: 42px;
-    border-radius: 12px;
-    border: 1px solid #E1D7CF;
-    background: #FFFDFC;
-    padding: 0 14px;
-    font-size: 14px;
-    color: #2B2B2B;
-    outline: none;
-}
-
-.search-box input::placeholder {
-    color: #9A8F86;
-}
 </style>
 </head>
 <body>
@@ -317,27 +322,31 @@ header {
 <header>기도문</header>
 
 <div class="tab-container">
-<button class="tab-btn active" data-category="aim">교구 인준 기도</button>
-<button class="tab-btn" data-category="basic">주요 기도</button>
-<button class="tab-btn" data-category="special">특수 기도</button>
-<button class="tab-btn" data-category="etc">여러가지 기도</button>
-<button class="tab-btn" data-category="bong1">위령기도</button>
-<button class="tab-btn" data-category="bong2">레지오 마리애</button>
-<button class="tab-btn " data-category="bong3">십자가의 길</button>
+    <button class="tab-btn active" data-category="aim">교구 인준 기도</button>
+    <button class="tab-btn" data-category="basic">주요 기도</button>
+    <button class="tab-btn" data-category="special">특수 기도</button>
+    <button class="tab-btn" data-category="etc">여러가지 기도</button>
+    <button class="tab-btn" data-category="bong1">위령기도</button>
+    <button class="tab-btn" data-category="bong2">레지오 마리애</button>
+    <button class="tab-btn" data-category="bong3">십자가의 길</button>
+</div>
+
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 기도문 검색">
 </div>
 
 <div id="list-view">
-<ul class="prayer-list" id="prayer-list">
-</ul>
+    <ul class="prayer-list" id="prayer-list"></ul>
 </div>
 
 <div id="detail-view">
-<div class="detail-header">
-<button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></button>
-  
-<div class="detail-title" id="detail-title">기도문</div>
-</div>
-<div class="detail-content" id="detail-content"></div>
+    <div class="detail-header">
+        <button class="back-btn" onclick="history.back()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="detail-title" id="detail-title">기도문</div>
+    </div>
+    <div class="detail-content" id="detail-content"></div>
 </div>
 <script>
         const prayerData = {
