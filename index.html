@@ -1058,26 +1058,6 @@ function toggleFavorite(id, e) {
 }
 
 function scrollActiveTabIntoView(activeBtn) {
-  const tabContainer = document.querySelector('.tab-container');
-  if (!tabContainer || !activeBtn) return;
-
-  const containerWidth = tabContainer.clientWidth;
-  const tabLeft = activeBtn.offsetLeft;
-  const tabWidth = activeBtn.offsetWidth;
-
-  let targetScroll = tabLeft - (containerWidth / 2) + (tabWidth / 2);
-
-  const maxScroll = tabContainer.scrollWidth - containerWidth;
-  if (targetScroll < 0) targetScroll = 0;
-  if (targetScroll > maxScroll) targetScroll = maxScroll;
-
-  tabContainer.scrollTo({
-    left: targetScroll,
-    behavior: 'smooth'
-  });
-}
-  
-function scrollActiveTabIntoView(activeBtn) {
   if (!tabContainer || !activeBtn) return;
 
   const containerWidth = tabContainer.clientWidth;
@@ -1098,21 +1078,14 @@ function scrollActiveTabIntoView(activeBtn) {
 
 function setActiveTab(category) {
   tabBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    tabBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    currentCategory = btn.getAttribute('data-category');
-
-    searchInput.value = '';
-    window.location.hash = '';
-
-    renderList(currentCategory);
-    window.scrollTo({ top: 0, behavior: 'auto' });
-
-    scrollActiveTabIntoView(btn);
+    btn.classList.toggle('active', btn.getAttribute('data-category') === category);
   });
-});
+
+  const activeBtn = document.querySelector(`.tab-btn[data-category="${category}"]`);
+  if (activeBtn) {
+    scrollActiveTabIntoView(activeBtn);
+  }
+}
 
 function renderList(category) {
   listEl.innerHTML = '';
