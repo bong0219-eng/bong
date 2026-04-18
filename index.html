@@ -6,7 +6,8 @@
 <title>기 도 문</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.c
+ loudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
  
@@ -1223,7 +1224,7 @@ function switchCategory(category, direction) {
   if (window.location.hash) history.replaceState(null,'',window.location.pathname);
   detailView.classList.remove('show');
   setActiveTab(category);
-  if (navigator.vibrate) navigator.vibrate(40);
+  if (navigator.vibrate) navigator.vibrate(1);
   flashCategoryAccent(category);
   pulseActiveTab(category);
   renderList(category);
