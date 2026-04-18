@@ -1173,6 +1173,7 @@ function setActiveTab(category) {
 
   const activeBtn = document.querySelector(`.tab-btn[data-category="${category}"]`);
   scrollActiveTabIntoView(activeBtn);
+  applyTabColors(); 
 }
 
 function applyTabColors() {
@@ -1180,8 +1181,17 @@ function applyTabColors() {
     const category = btn.getAttribute('data-category');
     const style = CATEGORY_STYLE[category] || CATEGORY_STYLE.aim;
 
-    btn.style.background = style.accent;
-    btn.style.borderColor = style.accent;
+    if (btn.classList.contains('active')) {
+      // 활성 탭
+      btn.style.background = style.accent;
+      btn.style.color = "#ffffff";
+      btn.style.borderColor = style.accent;
+    } else {
+      // 비활성 탭
+      btn.style.background = style.bg;
+      btn.style.color = style.color;
+      btn.style.borderColor = style.bg;
+    }
   });
 }
   
@@ -1318,9 +1328,10 @@ function switchCategory(category, direction) {
 
   detailView.classList.remove('show');
 
-  applyTabColors();
+  
   setActiveTab(category);
-
+applyTabColors();
+  
   flashCategoryAccent(category);
   pulseActiveTab(category);
   renderList(category);
