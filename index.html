@@ -1317,9 +1317,10 @@ function switchCategory(category, direction) {
   }
 
   detailView.classList.remove('show');
+
+  applyTabColors();
   setActiveTab(category);
 
-  
   flashCategoryAccent(category);
   pulseActiveTab(category);
   renderList(category);
