@@ -3,63 +3,78 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#1F2937">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="보편교회 가톨릭">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>보편교회 가톨릭</title>
-<link rel="manifest" href='data:application/manifest+json,{"name":"보편교회 가톨릭","short_name":"가톨릭","start_url":".","display":"standalone","background_color":"%231F2937","theme_color":"%231F2937"}'>
+
 <style>
-:root{--bg:#F8FAFC;--card:#fff;--ink:#111827;--sub:#6B7280;--line:#E5E7EB;--navy:#1F2937;--gold:#D4AA6A;--active:#0F766E;--header-h:70px;--tab-h:55px;--btn-h:40px;--fs-title:22px;--fs-tab:16px;--fs-body:16px;--fs-sub:12px;--app-scale:1}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Segoe UI",sans-serif;background:var(--navy);color:var(--ink);overflow:hidden}
-button,input{font-family:inherit}.view{display:none;position:fixed;inset:0;overflow:hidden}.view.active{display:flex}
-#cover{background:linear-gradient(180deg,#172033 0%,#1F2937 56%,#111827 100%);color:#fff;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 18px) 16px calc(env(safe-area-inset-bottom,0px) + 18px);align-items:center}
-.cover-inner{width:min(100%,520px);height:100%;display:flex;flex-direction:column;gap:14px}.cover-head{text-align:center;padding:8px 0 2px;flex-shrink:0}
-.cover-title{font-size:31px;font-weight:900;letter-spacing:-.04em;line-height:1.1}.cover-title .gold{color:var(--gold)}.cover-sub{font-size:13px;color:rgba(255,255,255,.72);margin-top:7px;line-height:1.5}
-.cover-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0;align-content:center}
-.cover-btn{min-height:82px;border:1px solid rgba(255,255,255,.14);border-radius:18px;background:rgba(255,255,255,.94);box-shadow:0 12px 24px rgba(0,0,0,.18);display:flex;align-items:center;gap:12px;padding:12px;cursor:pointer}
-.cover-btn:active{transform:scale(.985)}.cover-emoji{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#F3F4F6;font-size:24px;flex-shrink:0}.cover-text{min-width:0}
-.cover-name{font-size:calc(16px * var(--app-scale));font-weight:850;color:#111827;line-height:1.25;letter-spacing:-.02em;word-break:keep-all}.cover-desc{font-size:11px;color:#6B7280;margin-top:3px;line-height:1.3;word-break:keep-all}
-.cover-tools{display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0}.font-pill{height:36px;border-radius:18px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.1);color:#fff;padding:0 13px;font-size:14px;font-weight:800}
-.corner-btn{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));height:40px;border:none;border-radius:12px;background:#0F172A;color:#fff;font-size:13px;font-weight:800;padding:0 13px;box-shadow:0 8px 20px rgba(0,0,0,.25);z-index:30}#install-btn{left:14px}#qna-btn{right:14px}
-#detail{background:var(--bg);flex-direction:column}.module-header{height:calc(var(--header-h) + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 14px 0;background:var(--navy);color:#fff;display:flex;align-items:center;gap:12px;flex-shrink:0}.back-btn{width:38px;height:38px;border:none;border-radius:12px;background:rgba(255,255,255,.12);color:#fff;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center}.header-icon{width:42px;height:42px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;font-size:24px}.header-text{min-width:0;flex:1}.header-title{font-size:22px;font-weight:900;line-height:1.22;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.header-sub{font-size:12px;color:rgba(255,255,255,.72);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.module-body{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--bg)}
-.tabs{height:var(--tab-h);display:flex;gap:8px;align-items:center;padding:8px 12px;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;flex-shrink:0}.tabs::-webkit-scrollbar{display:none}.tab-btn{height:var(--btn-h);padding:0 14px;border-radius:13px;border:1.5px solid var(--line);background:#fff;color:#475569;font-size:calc(var(--fs-tab) * var(--app-scale));font-weight:850;white-space:nowrap}.tab-btn.active{color:#fff;border-color:transparent;background:var(--active)}
-.panel{display:none;flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;padding:12px}.panel.active{display:block}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 4px 14px rgba(15,23,42,.06)}.card-title{font-size:calc(16px * var(--app-scale));font-weight:850;color:#111827;line-height:1.42}.card-sub{font-size:calc(12px * var(--app-scale));color:#6B7280;margin-top:4px;line-height:1.48}.app-sub{font-size:calc(12px * var(--app-scale));line-height:1.45;color:#6B7280}.badge{height:30px;border-radius:999px;padding:0 10px;background:rgba(15,118,110,.10);color:var(--active);font-size:calc(12px * var(--app-scale));font-weight:850;display:inline-flex;align-items:center}.action-btn{height:var(--btn-h);border:none;border-radius:12px;background:var(--active);color:#fff;font-size:calc(16px * var(--app-scale));font-weight:850;padding:0 14px}.search{height:42px;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:0 14px;width:100%;font-size:calc(16px * var(--app-scale));outline:none}
-.map-wrap{position:relative;height:calc(100dvh - var(--header-h) - var(--tab-h) - env(safe-area-inset-top,0px));min-height:0;border-radius:0;background:#E5E7EB;overflow:hidden}.fake-map{position:absolute;inset:0;background:linear-gradient(135deg,#E8F2EA,#EAF2FF 50%,#F5EFE6)}.fake-grid{position:absolute;inset:-40px;background-image:linear-gradient(rgba(255,255,255,.45) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.45) 1px,transparent 1px);background-size:44px 44px;transform:rotate(-8deg)}.marker{position:absolute;left:50%;top:35%;transform:translate(-50%,-100%);width:30px;height:30px;border-radius:50% 50% 50% 0;background:#FACC15;border:3px solid #fff;box-shadow:0 6px 14px rgba(0,0,0,.28);rotate:-45deg}.marker:after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;left:7px;top:7px}.info-card{position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));background:#fff;border-radius:18px;border-top:4px solid var(--active);box-shadow:0 -8px 28px rgba(0,0,0,.18);padding:15px}.info-title{font-size:calc(16px * var(--app-scale));font-weight:900}.info-sub{font-size:calc(12px * var(--app-scale));color:#6B7280;margin-top:4px;line-height:1.45}.list-item{border-left:4px solid var(--active);cursor:pointer}.near-row{display:flex;align-items:center;gap:12px}.near-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--active);color:#fff;font-size:calc(14px * var(--app-scale));font-weight:900;flex-shrink:0}.prayer-text{font-size:calc(16px * var(--app-scale));line-height:1.85;color:#1F2937;white-space:pre-line}.diocese-line{display:flex;align-items:flex-start;gap:10px}.diocese-main{flex:1;min-width:0}.diocese-count{font-size:calc(12px * var(--app-scale));color:#64748B;font-weight:700;white-space:nowrap;margin-top:2px}.diocese-area{font-size:calc(12px * var(--app-scale));color:#6B7280;margin-top:5px;line-height:1.5;white-space:normal;word-break:keep-all}.swipe-hint{padding:8px 12px;color:#94A3B8;font-size:12px;text-align:center;background:#fff;border-top:1px solid #EEF2F7;flex-shrink:0}
+body{margin:0;font-family:sans-serif;background:#1F2937;color:#111}
+.view{display:none;height:100vh}
+.active{display:flex}
+#cover{flex-direction:column;justify-content:center;align-items:center;padding:16px;color:#fff}
+.title{font-size:26px;font-weight:900;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:420px}
+.btn{height:70px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;cursor:pointer}
+#detail{flex-direction:column;background:#F8FAFC}
+.header{height:60px;background:#1F2937;color:#fff;display:flex;align-items:center;padding:0 12px;font-size:18px;font-weight:900}
+.back{margin-right:10px;cursor:pointer}
+.content{flex:1;padding:16px;font-size:16px}
+.install{position:fixed;left:12px;bottom:20px;background:#0F172A;color:#fff;padding:10px 12px;border-radius:10px;font-size:13px}
+.qna{position:fixed;right:12px;bottom:20px;background:#0F172A;color:#fff;padding:10px 12px;border-radius:10px;font-size:13px}
 </style>
 </head>
+
 <body>
+
 <div id="cover" class="view active">
-  <div class="cover-inner">
-    <div class="cover-head"><div class="cover-title">보편교회 <span class="gold">가톨릭</span></div><div class="cover-sub">기도와 순례, 성당과 신앙 정보를 한곳에서</div></div>
-    <div class="cover-grid">
-      <button class="cover-btn" data-cat="mass"><span class="cover-emoji">🕊️</span><span class="cover-text"><span class="cover-name">매일미사</span><span class="cover-desc">오늘의 전례</span></span></button>
-      <button class="cover-btn" data-cat="prayer"><span class="cover-emoji">✝️</span><span class="cover-text"><span class="cover-name">주요기도문</span><span class="cover-desc">기도 모음</span></span></button>
-      <button class="cover-btn" data-cat="shrine"><span class="cover-emoji">⛪</span><span class="cover-text"><span class="cover-name">천주교 성지 167곳</span><span class="cover-desc">순교와 믿음의 자리</span></span></button>
-      <button class="cover-btn" data-cat="parish"><span class="cover-emoji">🏛️</span><span class="cover-text"><span class="cover-name">내주변 성당 찾기</span><span class="cover-desc">성당·본당 검색</span></span></button>
-      <button class="cover-btn" data-cat="retreat"><span class="cover-emoji">🌿</span><span class="cover-text"><span class="cover-name">피정의 집 찾기</span><span class="cover-desc">쉼과 기도</span></span></button>
-      <button class="cover-btn" data-cat="trail"><span class="cover-emoji">🚶</span><span class="cover-text"><span class="cover-name">전국 순례길</span><span class="cover-desc">신앙의 길</span></span></button>
-      <button class="cover-btn" data-cat="web"><span class="cover-emoji">🌐</span><span class="cover-text"><span class="cover-name">가톨릭 주요 웹사이트</span><span class="cover-desc">신앙 포털</span></span></button>
-      <button class="cover-btn" data-cat="diocese"><span class="cover-emoji">🗺️</span><span class="cover-text"><span class="cover-name">관구·교구 알아보기</span><span class="cover-desc">한국 천주교</span></span></button>
-    </div>
-    <div class="cover-tools"><button class="font-pill" id="font-down">가−</button><button class="font-pill" id="font-reset">기본</button><button class="font-pill" id="font-up">가＋</button></div>
-  </div>
-  <button class="corner-btn" id="install-btn">홈화면 앱설치</button><button class="corner-btn" id="qna-btn">문의·수정건의</button>
+<div class="title">보편교회 가톨릭</div>
+
+<div class="grid">
+<div class="btn" onclick="openLink()">매일미사</div>
+<div class="btn" onclick="go('주요기도문')">주요기도문</div>
+<div class="btn" onclick="go('성지')">천주교 성지</div>
+<div class="btn" onclick="go('성당')">내주변 성당</div>
+<div class="btn" onclick="go('피정')">피정의 집</div>
+<div class="btn" onclick="go('순례길')">전국 순례길</div>
+<div class="btn" onclick="go('웹사이트')">웹사이트</div>
+<div class="btn" onclick="go('관구교구')">관구교구</div>
 </div>
+
+<div class="install">앱설치</div>
+<div class="qna" onclick="qna()">문의</div>
+</div>
+
 <div id="detail" class="view">
-  <header class="module-header" id="module-header"><button class="back-btn" id="back-btn">‹</button><div class="header-icon" id="header-icon">✝️</div><div class="header-text"><div class="header-title" id="header-title">제목</div><div class="header-sub" id="header-sub">서브</div></div></header>
-  <main class="module-body"><nav class="tabs" id="tabs"></nav><section id="panels" class="module-body"></section><div class="swipe-hint">지도 화면을 제외한 화면에서는 좌우로 밀어 탭을 이동할 수 있습니다</div></main>
+<div class="header"><span class="back" onclick="back()">←</span><span id="title"></span></div>
+<div class="content">내용 영역</div>
 </div>
+
 <script>
-const QNA_URL="https://docs.google.com/spreadsheets/d/1V5JkIo-ZfcWOQTBcI7rdXCE7kvZUGKZfm4SnNmrYRqs";
-const MASS_URL="https://maria.catholic.or.kr/mi_pr/missa/missa.asp";
-const CATS={shrine:{title:"천주교 성지 167곳",sub:"순교와 믿음의 자리를 찾아서",icon:"⛪",color:"#B7791F",type:"map"},parish:{title:"내주변 성당 찾기",sub:"가까운 성당과 본당을 찾아보세요",icon:"🏛️",color:"#0F766E",type:"map"},retreat:{title:"피정의 집 찾기",sub:"기도와 쉼을 위한 공간",icon:"🌿",color:"#6FAF7B",type:"map"},prayer:{title:"주요기도문",sub:"가톨릭 신앙의 기도문",icon:"✝️",color:"#7C3AED",type:"prayer"},trail:{title:"전국 순례길",sub:"신앙의 길을 따라 걷습니다",icon:"🚶",color:"#2563EB",type:"trail"},web:{title:"가톨릭 주요 웹사이트",sub:"신앙 포털과 공식 사이트",icon:"🌐",color:"#475569",type:"web"},diocese:{title:"관구·교구 알아보기",sub:"한국 천주교 관구와 교구",icon:"🗺️",color:"#334155",type:"diocese"}};
-const DATA={shrine:[{name:"절두산 순교성지",area:"서울",addr:"서울 마포구 토정로 6",tel:"02-3142-4434",desc:"한국 천주교 순교 신앙의 대표 성지입니다."},{name:"해미국제성지",area:"대전",addr:"충남 서산시 해미면 성지1로 13",tel:"041-688-3183",desc:"내포 순교 신앙을 기억하는 국제성지입니다."},{name:"새남터 순교성지",area:"서울",addr:"서울 용산구 이촌로 80-8",tel:"02-716-1791",desc:"성직자 순교자들의 신앙을 기리는 성지입니다."}],parish:[{name:"전동성당",area:"전주",addr:"전북 전주시 완산구 태조로 51",tel:"063-284-3222",desc:"전주교구를 대표하는 아름다운 성당입니다."},{name:"명동대성당",area:"서울",addr:"서울 중구 명동길 74",tel:"02-774-1784",desc:"서울대교구 주교좌성당입니다."},{name:"계산주교좌성당",area:"대구",addr:"대구 중구 서성로 10",tel:"053-254-2300",desc:"대구대교구 주교좌성당입니다."}],retreat:[{name:"프란치스카눔",area:"대구",addr:"대구광역시 달서구",tel:"",desc:"기도와 묵상을 위한 피정 공간입니다."},{name:"골롬반 선교센터",area:"서울",addr:"서울 성북구",tel:"02-926-1217",desc:"선교 영성과 쉼을 위한 공간입니다."},{name:"마리스타 교육관",area:"서울",addr:"서울 마포구",tel:"",desc:"교육과 피정에 적합한 공간입니다."}],trail:[{name:"버그내 순례길",type:"도보",region:"충남 당진",desc:"순교 신앙의 발자취를 따라 걷는 길입니다."},{name:"한티가는 길",type:"도보",region:"대구·칠곡",desc:"한티성지로 이어지는 신앙의 순례길입니다."},{name:"김대건 신부 길",type:"순례",region:"용인·안성",desc:"성 김대건 안드레아 신부의 길을 기억합니다."}],web:[{name:"가톨릭 성인",cat:"신앙 포털",url:"https://maria.catholic.or.kr/mobile/sa_ho/list/list.asp?menugubun=saint&today=on",desc:"오늘의 성인과 성인 정보를 볼 수 있습니다."},{name:"성경",cat:"신앙 포털",url:"https://maria.catholic.or.kr/mobile/main/",desc:"가톨릭 성경과 신앙 정보를 확인합니다."},{name:"가톨릭 성가",cat:"신앙 포털",url:"https://maria.catholic.or.kr/mobile/sungga/sungga.asp",desc:"가톨릭 성가를 확인합니다."},{name:"가톨릭 생활성가",cat:"신앙 포털",url:"https://maria.catholic.or.kr/mobile/ccm/main.asp",desc:"생활성가와 CCM 정보를 확인합니다."},{name:"한국천주교주교회의",cat:"공식",url:"https://cbck.or.kr",desc:"한국 천주교 공식 자료와 소식을 제공합니다."}],diocese:[{name:"서울관구",kind:"관구",count:"7개 교구",area:"서울대교구, 인천교구, 수원교구, 춘천교구, 의정부교구, 원주교구, 군종교구"},{name:"서울대교구",kind:"교구",parishes:"233개 본당",area:"서울특별시 주요 지역"},{name:"대구관구",kind:"관구",count:"5개 교구",area:"대구대교구, 부산교구, 마산교구, 안동교구, 청주교구"},{name:"대구대교구",kind:"교구",parishes:"164개 본당",area:"대구광역시, 경상북도 일부 지역"},{name:"광주관구",kind:"관구",count:"4개 교구",area:"광주대교구, 전주교구, 제주교구, 대전교구"},{name:"군종교구",kind:"교구",parishes:"",area:"대한민국 국군 장병 사목 담당"}],prayers:[{tab:"공통",title:"주님의 기도",body:"하늘에 계신 우리 아버지,\n아버지의 이름이 거룩히 빛나시며\n아버지의 나라가 오시며\n아버지의 뜻이 하늘에서와 같이 땅에서도 이루어지소서.\n오늘 저희에게 일용할 양식을 주시고\n저희에게 잘못한 이를 저희가 용서하오니\n저희 죄를 용서하시고\n저희를 유혹에 빠지지 않게 하시고\n악에서 구하소서. 아멘."},{tab:"공통",title:"성모송",body:"은총이 가득하신 마리아님, 기뻐하소서.\n주님께서 함께 계시니 여인 중에 복되시며\n태중의 아들 예수님 또한 복되시나이다.\n천주의 성모 마리아님,\n이제와 저희 죽을 때에 저희 죄인을 위하여 빌어주소서. 아멘."},{tab:"십자가의 길",title:"십자가의 길",body:"제1처 예수님께서 사형 선고 받으심을 묵상합시다.\n...\n제14처 예수님께서 무덤에 묻히심을 묵상합시다."},{tab:"대구대교구 인준",title:"대구대교구 인준 기도",body:"교구와 본당 공동체를 위하여 바치는 기도문을 이곳에 넣습니다."}]};
-let current="cover",currentCat=null,currentTab=0,deferredPrompt=null;const fontSteps=[0.95,1,1.1,1.2,1.35];let fontIndex=Number(localStorage.getItem("fontIndex")||1);function applyFont(){document.documentElement.style.setProperty("--app-scale",fontSteps[fontIndex]);localStorage.setItem("fontIndex",String(fontIndex))}applyFont();function setActiveView(id){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.getElementById(id).classList.add("active")}function goCover(push=true){current="cover";currentCat=null;currentTab=0;setActiveView("cover");if(push)history.pushState({view:"cover"},"","#cover")}function goDetail(cat,push=true){const cfg=CATS[cat];if(!cfg)return;current="detail";currentCat=cat;currentTab=0;document.getElementById("module-header").style.background=cfg.color;document.getElementById("header-title").textContent=cfg.title;document.getElementById("header-sub").textContent=cfg.sub;document.getElementById("header-icon").textContent=cfg.icon;document.documentElement.style.setProperty("--active",cfg.color);renderModule(cat);setActiveView("detail");if(push)history.pushState({view:"detail",cat},"","#"+cat)}function back(){if(current==="detail")goCover(false);else history.back()}function renderTabs(names){const tabs=document.getElementById("tabs");tabs.innerHTML=names.map((n,i)=>`<button class="tab-btn ${i===currentTab?'active':''}" data-tab="${i}">${n}</button>`).join("");tabs.querySelectorAll(".tab-btn").forEach(b=>b.onclick=()=>setTab(Number(b.dataset.tab)))}function setTab(i){const panels=document.querySelectorAll(".panel");if(i<0)i=panels.length-1;if(i>=panels.length)i=0;currentTab=i;document.querySelectorAll(".tab-btn").forEach((b,idx)=>b.classList.toggle("active",idx===i));panels.forEach((p,idx)=>p.classList.toggle("active",idx===i));dismissKeyboard()}function renderModule(cat){if(["shrine","parish","retreat"].includes(cat))renderMapModule(cat);if(cat==="prayer")renderPrayerModule();if(cat==="trail")renderTrailModule();if(cat==="web")renderWebModule();if(cat==="diocese")renderDioceseModule()}function panel(id,html,active=false){return `<div class="panel ${active?'active':''}" id="${id}">${html}</div>`}function renderMapModule(cat){const data=DATA[cat];renderTabs(["지도","목록","내주변","지역검색"]);const list=data.map((d,i)=>placeCard(d,i,cat)).join("");const regions=`<input class="search" id="regionSearch" placeholder="지역 또는 이름 검색" oninput="filterRegion('${cat}')"><div id="regionResult">${list}</div>`;document.getElementById("panels").innerHTML=panel("mapPanel",`<div class="map-wrap"><div class="fake-map"><div class="fake-grid"></div></div><div class="marker"></div><div class="info-card open" id="mapInfo"><div class="info-title">${data[0].name}</div><div class="info-sub">${data[0].addr}<br>${data[0].desc}</div><div style="margin-top:10px"><button class="action-btn">길찾기</button></div></div></div>`,true)+panel("listPanel",list)+panel("nearPanel",data.map((d,i)=>`<div class="card near-row list-item" onclick="openInfo('${cat}',${i})"><div class="near-num">${i+1}</div><div><div class="card-title">${d.name}</div><div class="card-sub">${d.addr}</div></div></div>`).join(""))+panel("regionPanel",regions)}function placeCard(d,i,cat){return `<div class="card list-item" onclick="openInfo('${cat}',${i})"><div class="card-title">${d.name}</div><div class="card-sub">${d.area} · ${d.addr}</div><div class="app-sub">${d.desc}</div></div>`}function openInfo(cat,i){const d=DATA[cat][i];setTab(0);document.getElementById("mapInfo").innerHTML=`<div class="info-title">${d.name}</div><div class="info-sub">${d.addr}<br>${d.desc}</div><div style="margin-top:10px"><button class="action-btn">길찾기</button></div>`}function filterRegion(cat){const q=document.getElementById("regionSearch").value.trim();const result=DATA[cat].filter(d=>!q||d.name.startsWith(q)||d.area.includes(q)).map((d,i)=>placeCard(d,i,cat)).join("");document.getElementById("regionResult").innerHTML=result||`<div class="card app-sub">검색 결과가 없습니다.</div>`}function renderPrayerModule(){const tabs=[...new Set(DATA.prayers.map(p=>p.tab))];renderTabs(tabs);document.getElementById("panels").innerHTML=tabs.map((t,i)=>{const items=DATA.prayers.filter(p=>p.tab===t).map(p=>`<div class="card" onclick="showPrayer('${encodeURIComponent(p.title)}')"><div class="card-title">${p.title}</div><div class="card-sub">기도문 보기</div></div>`).join("");return panel("prayer"+i,`<div class="prayer-list">${items}</div>`,i===0)}).join("")}function showPrayer(encoded){const title=decodeURIComponent(encoded);const p=DATA.prayers.find(x=>x.title===title);const active=currentTab;document.getElementById("panels").innerHTML=panel("prayerDetail",`<div class="card"><div class="card-title">${p.title}</div><div class="prayer-text" style="margin-top:12px">${p.body}</div></div>`,true);document.getElementById("tabs").innerHTML=`<button class="tab-btn active" onclick="renderPrayerModule(); setTab(${active});">목록으로</button>`}function renderTrailModule(){renderTabs(["전체","도보","순례"]);document.getElementById("panels").innerHTML=["전체","도보","순례"].map((t,i)=>{const arr=DATA.trail.filter(d=>t==="전체"||d.type===t);return panel("trail"+i,arr.map(d=>`<div class="card"><span class="badge">${d.type}</span><div class="card-title" style="margin-top:8px">${d.name}</div><div class="card-sub">${d.region}</div><div class="app-sub">${d.desc}</div></div>`).join(""),i===0)}).join("")}function renderWebModule(){const tabs=[...new Set(DATA.web.map(w=>w.cat))];renderTabs(tabs);document.getElementById("panels").innerHTML=tabs.map((t,i)=>panel("web"+i,DATA.web.filter(w=>w.cat===t).map(w=>`<div class="card" onclick="window.open('${w.url}','_blank')"><div class="card-title">${w.name}</div><div class="card-sub">${w.desc}</div><div class="app-sub">${w.url}</div></div>`).join(""),i===0)).join("")}function renderDioceseModule(){renderTabs(["관구","교구","전체"]);const make=(mode)=>DATA.diocese.filter(d=>mode==="전체"||d.kind===mode).map(d=>{const count=d.kind==="관구"?`<div class="diocese-count">${d.count||""}</div>`:(d.parishes?`<div class="diocese-count">${d.parishes}</div>`:"");return `<div class="card"><div class="diocese-line"><div class="diocese-main"><div class="card-title">${d.name}</div></div>${count}</div><div class="diocese-area">${d.area}</div></div>`}).join("");document.getElementById("panels").innerHTML=panel("prov",make("관구"),true)+panel("dio",make("교구"))+panel("all",make("전체"))}function dismissKeyboard(){if(document.activeElement&&document.activeElement.blur)document.activeElement.blur()}
-document.querySelectorAll(".cover-btn").forEach(btn=>{btn.addEventListener("click",()=>{const cat=btn.dataset.cat;if(cat==="mass"){window.open(MASS_URL,"_blank");return}goDetail(cat)})});document.getElementById("back-btn").onclick=back;document.getElementById("qna-btn").onclick=()=>window.open(QNA_URL,"_blank");document.getElementById("font-down").onclick=()=>{fontIndex=Math.max(0,fontIndex-1);applyFont()};document.getElementById("font-up").onclick=()=>{fontIndex=Math.min(fontSteps.length-1,fontIndex+1);applyFont()};document.getElementById("font-reset").onclick=()=>{fontIndex=1;applyFont()};window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});document.getElementById("install-btn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null}else alert("브라우저 메뉴에서 '홈 화면에 추가' 또는 '앱 설치'를 선택해 주세요.")};history.replaceState({view:"cover"},"","#cover");window.addEventListener("popstate",e=>{if(e.state&&e.state.view==="detail"&&e.state.cat){goDetail(e.state.cat,false);return}goCover(false)});
-let sx=0,sy=0;document.getElementById("detail").addEventListener("touchstart",e=>{if(!e.touches[0])return;sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});document.getElementById("detail").addEventListener("touchend",e=>{if(currentCat&&["shrine","parish","retreat"].includes(currentCat)&&currentTab===0)return;const t=e.changedTouches[0];if(!t)return;const dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0)setTab(currentTab+1);else setTab(currentTab-1)}},{passive:true});
+let state="cover"
+
+function show(id){
+document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'))
+document.getElementById(id).classList.add('active')
+}
+
+function go(name){
+state="detail"
+document.getElementById("title").innerText=name
+show("detail")
+}
+
+function back(){
+state="cover"
+show("cover")
+}
+
+function openLink(){
+window.open("https://maria.catholic.or.kr/mi_pr/missa/missa.asp","_blank")
+}
+
+function qna(){
+window.open("https://docs.google.com","_blank")
+}
 </script>
+
 </body>
 </html>
