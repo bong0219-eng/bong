@@ -15,6 +15,16 @@
   }
 })();
 </script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3498db">
+
+  <script>
+    var userAgent = navigator.userAgent.toLowerCase();
+    var targetUrl = location.href;
+    if (userAgent.match(/kakaotalk/i) && userAgent.match(/android/i)) {
+      location.href = 'intent://' + targetUrl.replace(/https?:\/\//i, '') + '#Intent;scheme=https;package=com.android.chrome;end';
+    }
+  </script>
 
 <meta charset="UTF-8">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -5984,6 +5994,46 @@ html.app-active #qna-cover-btn{display:none !important;}
   window.addEventListener('load',function(){restoreCover();setTimeout(restoreCover,250);setTimeout(restoreCover,800);},{once:true});
 })();
 </script>
+  <button id="install-btn" style="display: none; background-color: #2ecc71; color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 30px; cursor: pointer; margin: 20px auto; z-index: 9999;">📱 홈 화면에 앱 설치하기</button>
+  <script>
+    // 서비스 워커 등록 (크롬 PWA 필수 조건)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW 등록 실패:', err));
+      });
+    }
+
+    // 설치 버튼 로직
+    let deferredPrompt;
+    const installBtn = document.getElementById('install-btn');
+
+    if (installBtn) {
+      // 크롬이 설치 조건이 맞다고 판단하면 버튼을 보여줌
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'inline-block'; 
+      });
+
+      // 버튼 클릭 시 설치 팝업 띄우기
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            installBtn.style.display = 'none'; // 설치 승인하면 버튼 숨김
+          }
+          deferredPrompt = null;
+        }
+      });
+
+      // 설치가 완료되면 실행
+      window.addEventListener('appinstalled', () => {
+        installBtn.style.display = 'none';
+        alert('설치가 완료되었습니다! 바탕화면을 확인해주세요.');
+      });
+    }
+  </script>
 
 </body>
 </html>
