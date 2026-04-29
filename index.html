@@ -3,24 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PWA 테스트 앱</title>
+  <title>PWA 안드로이드 테스트</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#3498db">
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="테스트앱">
-  
-  <link rel="apple-touch-icon" href="icon-192x192.png">
-
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       text-align: center;
       padding: 50px 20px;
       background-color: #f4f4f9;
-      color: #333;
     }
     .box {
       background: white;
@@ -30,50 +23,86 @@
       margin-bottom: 20px;
     }
     h1 { color: #3498db; }
-    .status { font-weight: bold; color: #e74c3c; margin-top: 20px; }
+    
+    /* 우리가 직접 만든 앱 설치 버튼 (처음엔 숨겨둠) */
+    #install-btn {
+      display: none;
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(46, 204, 113, 0.4);
+      margin: 20px auto;
+      transition: background 0.3s;
+    }
+    #install-btn:hover { background-color: #27ae60; }
   </style>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var userAgent = navigator.userAgent.toLowerCase();
-      var targetUrl = location.href;
-      var statusText = document.getElementById("browser-status");
+    // 1단계: 카카오톡 브라우저 감지 및 크롬으로 자동 튕겨내기
+    var userAgent = navigator.userAgent.toLowerCase();
+    var targetUrl = location.href;
 
-      if (userAgent.match(/kakaotalk/i)) {
-        statusText.innerText = "현재 카카오톡 인앱 브라우저입니다.";
-        statusText.style.color = "#e74c3c";
-
-        if (userAgent.match(/android/i)) {
-          // 안드로이드 카카오톡: 크롬으로 강제 이동
-          var intentUrl = 'intent://' + targetUrl.replace(/https?:\/\//i, '') + '#Intent;scheme=https;package=com.android.chrome;end';
-          location.href = intentUrl;
-        } else if (userAgent.match(/iphone|ipad|ipod/i)) {
-          // iOS 카카오톡: 사파리로 열기 안내
-          alert("카톡에서는 앱 설치가 불가능합니다.\n\n우측 하단의 [ ⋯ ] 버튼을 누르고\n[ Safari로 열기 ]를 선택해 주세요.");
-        }
-      } else {
-        statusText.innerText = "현재 일반 브라우저(크롬/사파리)입니다. 홈 화면에 추가해보세요!";
-        statusText.style.color = "#2ecc71";
-      }
-    });
+    if (userAgent.match(/kakaotalk/i) && userAgent.match(/android/i)) {
+      // 안드로이드 카카오톡이면 크롬으로 강제 이동 후 종료
+      location.href = 'intent://' + targetUrl.replace(/https?:\/\//i, '') + '#Intent;scheme=https;package=com.android.chrome;end';
+    }
   </script>
 </head>
 <body>
 
   <div class="box">
-    <h1>🚀 웹앱 테스트</h1>
-    <p>이 페이지는 주소창 없이 실행되는<br>웹앱(PWA) 테스트 화면입니다.</p>
-    <p id="browser-status" class="status">브라우저 환경 확인 중...</p>
+    <h1>🚀 안드로이드 자동 설치</h1>
+    <p>크롬 브라우저로 열렸다면,<br>아래 버튼이 나타납니다.</p>
+    
+    <button id="install-btn">📱 홈 화면에 앱 설치하기</button>
   </div>
 
-  <div class="box">
-    <h3>💡 테스트 방법</h3>
-    <ul style="text-align: left; line-height: 1.6;">
-      <li><strong>안드로이드:</strong> 브라우저 메뉴(⋮) > <b>[홈 화면에 추가]</b></li>
-      <li><strong>아이폰(iOS):</strong> 하단 공유 버튼(⍐) > <b>[홈 화면에 추가]</b></li>
-      <li>바탕화면에 생성된 아이콘을 눌러 실행하면 주소창이 사라집니다!</li>
-    </ul>
-  </div>
+  <script>
+    // 2단계: 크롬에서 '설치하기' 버튼 활성화 및 팝업 띄우기
+    let deferredPrompt;
+    const installBtn = document.getElementById('install-btn');
+
+    // 브라우저가 PWA 설치 조건이 충족되었다고 판단하면 발생하는 이벤트
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // 브라우저가 기본으로 띄우는 설치 안내바를 막음 (우리가 만든 버튼을 쓰기 위해)
+      e.preventDefault();
+      // 이벤트를 보관해둠 (나중에 버튼 클릭 시 실행하기 위해)
+      deferredPrompt = e;
+      // 숨겨두었던 설치 버튼을 화면에 보여줌
+      installBtn.style.display = 'inline-block';
+    });
+
+    // 우리가 만든 설치 버튼을 클릭했을 때
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        // 보관해둔 설치 팝업을 띄움 ("설치하시겠습니까?")
+        deferredPrompt.prompt();
+        
+        // 사용자가 '설치'를 눌렀는지 '취소'를 눌렀는지 결과 확인
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('사용자가 설치를 승인했습니다.');
+          installBtn.style.display = 'none'; // 설치했으니 버튼 숨김
+        } else {
+          console.log('사용자가 설치를 취소했습니다.');
+        }
+        // 한 번 사용한 프롬프트는 비워줌
+        deferredPrompt = null;
+      }
+    });
+
+    // 설치가 완전히 완료되었을 때 실행되는 이벤트
+    window.addEventListener('appinstalled', () => {
+      console.log('앱 설치가 완료되었습니다!');
+      installBtn.style.display = 'none';
+      alert('바탕화면에 앱이 설치되었습니다! 바탕화면에서 실행해주세요.');
+    });
+  </script>
 
 </body>
 </html>
