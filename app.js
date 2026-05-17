@@ -837,7 +837,7 @@ function syncCoverUpdateVersionState(){
     var box = document.getElementById('cover-update-box');
     var marker = document.getElementById('oai-build-marker');
     if(!btn || !box) return;
-    var target = btn.getAttribute('data-target-version') || 'V1-S-A15';
+    var target = btn.getAttribute('data-target-version') || 'V1-S-A20';
     var current = '';
     if(window.APP_VERSION) current = String(window.APP_VERSION).trim();
     if(!current && marker) current = String(marker.textContent || '').trim();
@@ -991,34 +991,6 @@ function missaLoaded(){
   // 매일미사 외부 iframe 제거: 남겨둔 호환용 빈 함수
 }
 
-/* prayer.js 지연 로드 헬퍼
-   첫 진입 시 한 번만 로드, 이후 캐시에서 즉시 반환 */
-var _prayerJsLoaded = false;
-var _prayerJsLoading = false;
-var _prayerJsCallbacks = [];
-function _loadPrayerJs(onReady){
-  if(_prayerJsLoaded){
-    if(typeof onReady === 'function') onReady();
-    return;
-  }
-  if(typeof onReady === 'function') _prayerJsCallbacks.push(onReady);
-  if(_prayerJsLoading) return;
-  _prayerJsLoading = true;
-  var s = document.createElement('script');
-  s.src = 'prayer.js?v=' + (window.APP_VERSION || 'V1-S-dio-websame3');
-  s.onload = function(){
-    _prayerJsLoaded = true;
-    _prayerJsLoading = false;
-    var cbs = _prayerJsCallbacks.splice(0);
-    cbs.forEach(function(cb){ try{ cb(); }catch(e){ console.warn('[가톨릭길동무]', e); } });
-  };
-  s.onerror = function(){
-    _prayerJsLoading = false;
-    console.warn('[가톨릭길동무] prayer.js 로드 실패');
-  };
-  document.head.appendChild(s);
-}
-
 function openPrayerBook(opts){
   // 주요기도문은 앱 내부 카테고리지만, 빠른메뉴에서 들어온 경우 뒤로가기는 팝업으로 복귀한다.
   if(opts && opts.fromMassQuick){
@@ -1045,11 +1017,11 @@ function openPrayerBook(opts){
   }catch(e){ console.warn("[가톨릭길동무]", e); }
   if(typeof oaiSetMainMapLayerHidden==='function') oaiSetMainMapLayerHidden(true);
   view.classList.add('open');
+  // V1-S: restore 변수 미정의 오류 방지. 주요기도문 초기화가 중간에 끊기면
+  // 탭/목록이 비어 보이므로 opts.restore 값을 명확히 계산해서 사용한다.
   var restore = !!(opts && opts.restore);
   if(!restore && typeof oaiEnterView==='function') oaiEnterView(view);
   var setupDelay = (opts && opts.instant) ? 0 : 50;
-  // prayer.js 지연 로드: 첫 진입 시 로드, 이후 캐시에서 즉시 실행
-  _loadPrayerJs(function(){
   setTimeout(function(){
     if(typeof window.initPrayerView==='function') try{window.initPrayerView();}catch(e){ console.warn("[가톨릭길동무]", e); }
     try{ if(typeof window.prEnsureTabsVisible==='function') window.prEnsureTabsVisible(); }catch(e){ console.warn("[가톨릭길동무]", e); }
@@ -1062,7 +1034,6 @@ function openPrayerBook(opts){
     var list=document.getElementById('prayer-list-view'); if(list) list.scrollTop=0;
     var tabs=document.getElementById('prayer-tabs'); if(tabs) tabs.scrollLeft=0;
   }, setupDelay);
-  }); // _loadPrayerJs 콜백 닫힘
 }
 function closePrayerView(){
   const view=$('prayer-view');
@@ -1201,7 +1172,7 @@ function openDioceseView(opts){
       if(!restore) try{ frame.contentWindow && frame.contentWindow.resetDioceseFirstPage && frame.contentWindow.resetDioceseFirstPage(); }catch(e){ console.warn("[가톨릭길동무]", e); }
       if(typeof dioceseLoaded==='function') dioceseLoaded();
     };
-    frame.src='diocese.html?v=V1-S-A15';
+    frame.src='diocese.html?v=V1-S-A20';
   }else if(!restore){
     try{ frame.contentWindow && frame.contentWindow.resetDioceseFirstPage && frame.contentWindow.resetDioceseFirstPage(); }catch(e){ console.warn("[가톨릭길동무]", e); }
   }
