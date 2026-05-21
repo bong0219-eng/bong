@@ -1366,6 +1366,7 @@ window.addEventListener('load', syncCoverUpdateVersionState, true);
       });
     });
 
+
     document.addEventListener('keydown', function(e){
       if(e.key !== 'Escape') return;
       hideModal('guide-intro-modal');
@@ -5848,10 +5849,7 @@ document.addEventListener('DOMContentLoaded', function bindEvents() {
       closeMenu();
       try{ openQnaView(); }catch(err){ console.warn('[가톨릭길동무]', err); }
     });
-    on('cover-menu-privacy-link', 'click', function(){
-      closeMenu();
-      try{ sessionStorage.setItem('oai_nav_returning', '1'); }catch(_e){}
-    });
+    on('cover-menu-privacy-link', 'click', function(){ closeMenu(); });
     document.addEventListener('keydown', function(e){
       if(e && e.key === 'Escape' && modal.classList.contains('show')) closeMenu();
     });
@@ -5946,6 +5944,7 @@ document.addEventListener('DOMContentLoaded', function bindEvents() {
   // ── 매일미사 iframe 로드 ──
   on('missa-frame', 'load', function() { if (typeof missaLoaded === 'function') missaLoaded(); });
 });
+
 
 
 
