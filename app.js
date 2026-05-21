@@ -1267,7 +1267,12 @@ window.addEventListener('load', syncCoverUpdateVersionState, true);
     // 주요 기능을 확인한 사용자는 일주일간 자동 안내를 다시 띄우지 않는다.
     setVal(KEY_HIDE_UNTIL, now() + HIDE_DAYS*24*60*60*1000);
   }
-  function closeGuideManual(){ hideModal('guide-manual-modal'); }
+  function closeGuideManual(){
+    hideModal('guide-manual-modal');
+    // 확인/X 버튼으로 닫을 때도 커버 back trap을 재설정해
+    // 메뉴 경유 시 남는 coverMenuOpen 히스토리 항목이 종료 흐름을 방해하지 않도록 한다.
+    try{ if(typeof window._ensureCoverBackTrap === 'function') window._ensureCoverBackTrap('guide-manual-close'); }catch(e){ console.warn('[가톨릭길동무]', e); }
+  }
   function closeIntroLater(){
     hideModal('guide-intro-modal');
     var count = getInt(KEY_COUNT) + 1;
@@ -1366,7 +1371,12 @@ window.addEventListener('load', syncCoverUpdateVersionState, true);
       });
     });
 
-    // 커버 메뉴 popstate 처리는 patches.js 메인 컨트롤러에서 isCoverMenuPopupOpen 체크로 통합
+    // V1-37 cover menu popstate close
+    window.addEventListener('popstate', function(){
+      if(modal.classList.contains('show')){
+        closeMenu();
+      }
+    });
     document.addEventListener('keydown', function(e){
       if(e.key !== 'Escape') return;
       hideModal('guide-intro-modal');
@@ -5950,6 +5960,14 @@ document.addEventListener('DOMContentLoaded', function bindEvents() {
 });
 
 
-// 커버 메뉴 popstate 처리는 patches.js 메인 popstate 컨트롤러로 통합
-// (isCoverMenuPopupOpen 체크로 단일 처리)
+// V1-37 cover menu hardware back guard
+(function(){
+  window.addEventListener('popstate', function(){
+    try{
+      if(window.isCoverMenuPopupOpen && window.isCoverMenuPopupOpen()){
+        if(window.closeCoverMenuPopup) window.closeCoverMenuPopup();
+      }
+    }catch(e){ console.warn('[가톨릭길동무]', e); }
+  }, true);
+})();
 
