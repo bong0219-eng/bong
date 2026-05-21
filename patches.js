@@ -580,11 +580,10 @@
       return;
     }
 
-    /* 커버 메뉴 팝업: guide-modal 클래스가 없어 isGuideModalOpen에 안 잡힘.
-       !appActive() 체크 전에 처리해야 toast가 잘못 발동되지 않는다. */
+    /* 커버 메뉴 팝업 처리: guide-modal 클래스 없어 isGuideModalOpen에 안 잡힘.
+       !appActive() 체크 전에 처리해야 토스트가 잘못 발동되지 않는다. */
     if(window.isCoverMenuPopupOpen && window.isCoverMenuPopupOpen()){
       try{ if(typeof window.closeCoverMenuPopup === 'function') window.closeCoverMenuPopup(); }catch(e){ console.warn('[가톨릭길동무]', e); }
-      try{ if(typeof window._resetCoverExitReady === 'function') window._resetCoverExitReady(); }catch(e){ console.warn('[가톨릭길동무]', e); }
       try{ if(typeof window._clearCoverExitArmed === 'function') window._clearCoverExitArmed(); }catch(e){ console.warn('[가톨릭길동무]', e); }
       armCoverBackTrap('cover-menu-close');
       return;
