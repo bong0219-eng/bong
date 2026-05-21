@@ -520,6 +520,19 @@
        어떤 화면 처리도 하지 않고 여기서 끝낸다. 이 순서가 중요하다. */
     if(_restoring){
       _restoring = false;
+      /* 커버 모달(주요기능·메뉴팝업) go(1) 복원 후 콜백 */
+      try{
+        var _cmCb = window.__OAI_AFTER_RESTORE_COVER_MODAL_CB__;
+        var _cmUntil = Number(window.__OAI_AFTER_RESTORE_COVER_MODAL_UNTIL__ || 0);
+        if(typeof _cmCb === 'function'){
+          window.__OAI_AFTER_RESTORE_COVER_MODAL_CB__ = null;
+          window.__OAI_AFTER_RESTORE_COVER_MODAL_UNTIL__ = 0;
+          if(!_cmUntil || Date.now() < _cmUntil){
+            setTimeout(function(){ try{ _cmCb(); }catch(e){ console.warn('[가톨릭길동무]', e); } }, 0);
+            return;
+          }
+        }
+      }catch(e){ console.warn('[가톨릭길동무]', e); }
       if(runPendingPrayerCoverReset()) return;
       runPendingPrayerQuickPopup();
       return;
@@ -566,21 +579,37 @@
       return;
     }
 
-    /* 개인정보 등 내부 페이지에서 bfcache 복귀 시 popstate가 먼저 발생한다.
-       이동 전에 sessionStorage 플래그를 설정해 복귀를 구분하고 토스트를 막는다. */
-    try{
-      if(sessionStorage.getItem('oai_nav_returning') === '1'){
-        sessionStorage.removeItem('oai_nav_returning');
-        try{ if(typeof window._resetCoverExitReady === 'function') window._resetCoverExitReady(); }catch(_e){}
-        if(!appActive()){ armCoverBackTrap('nav-return-cover'); return; }
-      }
-    }catch(_e){}
-
-    /* 커버 메뉴 팝업이 열려 있으면 먼저 닫고 trap 재설정.
-       openMenu에 pushState가 없으므로 back 시 trap(1)이 소비된 상태로 도착한다. */
+    /* 커버 메뉴 팝업이 열려 있으면 go(1)로 trap 복원 후 팝업을 닫는다.
+       isPrayerReturnPopupOpen과 동일한 패턴:
+       "먼저 history.go(1)로 방금 소비된 공통 trap을 복원한 뒤 닫아야
+        커버 첫 Back이 앱 종료로 빠지지 않는다." */
     if(window.isCoverMenuPopupOpen && window.isCoverMenuPopupOpen()){
-      try{ if(typeof window.closeCoverMenuPopup === 'function') window.closeCoverMenuPopup(); }catch(e){ console.warn('[가톨릭길동무]', e); }
-      try{ armCoverBackTrap('cover-menu-close'); }catch(e){ console.warn('[가톨릭길동무]', e); }
+      var _menuCb = function(){
+        try{ if(typeof window.closeCoverMenuPopup === 'function') window.closeCoverMenuPopup(); }catch(e){ console.warn('[가톨릭길동무]', e); }
+        try{ if(typeof window._resetCoverExitReady === 'function') window._resetCoverExitReady(); }catch(e){}
+        try{ if(typeof window._clearCoverExitArmed === 'function') window._clearCoverExitArmed(); }catch(e){}
+      };
+      try{
+        window.__OAI_AFTER_RESTORE_COVER_MODAL_CB__ = _menuCb;
+        window.__OAI_AFTER_RESTORE_COVER_MODAL_UNTIL__ = Date.now() + 1800;
+        _restoring = true;
+        history.go(1);
+        setTimeout(function(){
+          try{
+            if(window.__OAI_AFTER_RESTORE_COVER_MODAL_CB__ === _menuCb){
+              _restoring = false;
+              window.__OAI_AFTER_RESTORE_COVER_MODAL_CB__ = null;
+              window.__OAI_AFTER_RESTORE_COVER_MODAL_UNTIL__ = 0;
+              _menuCb();
+            }
+          }catch(e){ console.warn('[가톨릭길동무]', e); }
+        }, 160);
+      }catch(e){
+        _restoring = false;
+        console.warn('[가톨릭길동무]', e);
+        _menuCb();
+        armCoverBackTrap('cover-menu-close-fallback');
+      }
       return;
     }
 
@@ -590,11 +619,33 @@
       return;
     }
 
-    /* 빠른메뉴/안내 팝업이 열려 있으면 먼저 닫는다. */
+    /* 빠른메뉴/안내 팝업이 열려 있으면 go(1)로 trap 복원 후 닫는다. */
     if(isGuideModalOpen()){
-      closeGuideModals();
-      try{ if(typeof window._clearCoverExitArmed === 'function') window._clearCoverExitArmed(); }catch(e){ console.warn('[가톨릭길동무]', e); }
-      try{ if(typeof window._ensureCoverBackTrap === 'function') window._ensureCoverBackTrap('guide-modal'); else armCoverBackTrap('guide-modal'); }catch(e){ console.warn("[가톨릭길동무]", e); }
+      var _guideCb = function(){
+        closeGuideModals();
+        try{ if(typeof window._clearCoverExitArmed === 'function') window._clearCoverExitArmed(); }catch(e){ console.warn('[가톨릭길동무]', e); }
+      };
+      try{
+        window.__OAI_AFTER_RESTORE_COVER_MODAL_CB__ = _guideCb;
+        window.__OAI_AFTER_RESTORE_COVER_MODAL_UNTIL__ = Date.now() + 1800;
+        _restoring = true;
+        history.go(1);
+        setTimeout(function(){
+          try{
+            if(window.__OAI_AFTER_RESTORE_COVER_MODAL_CB__ === _guideCb){
+              _restoring = false;
+              window.__OAI_AFTER_RESTORE_COVER_MODAL_CB__ = null;
+              window.__OAI_AFTER_RESTORE_COVER_MODAL_UNTIL__ = 0;
+              _guideCb();
+            }
+          }catch(e){ console.warn('[가톨릭길동무]', e); }
+        }, 160);
+      }catch(e){
+        _restoring = false;
+        console.warn('[가톨릭길동무]', e);
+        _guideCb();
+        armCoverBackTrap('guide-modal-fallback');
+      }
       return;
     }
 
@@ -625,10 +676,15 @@
     if(closeRefreshDialog()){ try{ armCoverBackTrap('refresh-dialog-hardware', {force:true}); }catch(e){} return; }
     if(window.isCoverMenuPopupOpen && window.isCoverMenuPopupOpen()){
       try{ if(typeof window.closeCoverMenuPopup === 'function') window.closeCoverMenuPopup(); }catch(e){ console.warn('[가톨릭길동무]', e); }
-      try{ armCoverBackTrap('cover-menu-close-hw'); }catch(e){ console.warn('[가톨릭길동무]', e); }
+      try{ if(typeof window._resetCoverExitReady === 'function') window._resetCoverExitReady(); }catch(e){}
+      try{ if(typeof window._clearCoverExitArmed === 'function') window._clearCoverExitArmed(); }catch(e){}
       return;
     }
-    if(isGuideModalOpen()){ closeGuideModals(); return; }
+    if(isGuideModalOpen()){
+      closeGuideModals();
+      try{ if(typeof window._clearCoverExitArmed === 'function') window._clearCoverExitArmed(); }catch(e){}
+      return;
+    }
     if(!appActive()){
       if(typeof window._showBackToast==='function') window._showBackToast();
       return;
@@ -643,11 +699,6 @@
   // 트랩이 소실되면 다음 뒤로가기에서 앱이 탈출된다.
   window.addEventListener('pageshow', function(){
     try{
-      /* non-bfcache 복귀 시 popstate가 발생하지 않으므로 여기서 플래그 정리 */
-      if(sessionStorage.getItem('oai_nav_returning') === '1'){
-        sessionStorage.removeItem('oai_nav_returning');
-        try{ if(typeof window._resetCoverExitReady === 'function') window._resetCoverExitReady(); }catch(_e){}
-      }
       var st = history.state;
       if(st && st._p === 1) return;  // 트랩 유지 중이면 스킵
       if(!appActive()) armCoverBackTrap('pageshow-cover');
