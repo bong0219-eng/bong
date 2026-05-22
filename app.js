@@ -909,7 +909,7 @@ function _runRefreshAppFilesOnly(){
   try{
     if(btn){
       btn.disabled = true;
-      btn.textContent = ((btn.getAttribute('data-target-version') || 'V1-48') + ' 새로고침 중');
+      btn.textContent = ((btn.getAttribute('data-target-version') || 'V1-50') + ' 새로고침 중');
     }
     if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
     // V37: 새로고침 전에는 레이아웃/스크롤/모달 DOM을 건드리지 않고,
@@ -1071,7 +1071,7 @@ function syncCoverUpdateVersionState(){
     var box = document.getElementById('cover-update-box');
     var marker = document.getElementById('oai-build-marker');
     if(!btn || !box) return;
-        var target = btn.getAttribute('data-target-version') || 'V1-48';
+        var target = btn.getAttribute('data-target-version') || 'V1-50';
     var current = '';
     if(window.APP_VERSION) current = String(window.APP_VERSION).trim();
     if(!current && marker) current = String(marker.textContent || '').trim();
@@ -1080,7 +1080,7 @@ function syncCoverUpdateVersionState(){
     btn.textContent = mismatch ? (target + ' 업데이트 필요') : (target + ' 새로고침');
     box.classList.toggle('update-needed', mismatch);
     if(marker){
-      marker.textContent = target || 'V1-48';
+      marker.textContent = target || 'V1-50';
       marker.setAttribute('hidden', 'hidden');
       marker.setAttribute('aria-hidden','true');
       marker.style.display = 'none';
@@ -1424,7 +1424,7 @@ function openDioceseView(opts){
       if(!restore) try{ frame.contentWindow && frame.contentWindow.resetDioceseFirstPage && frame.contentWindow.resetDioceseFirstPage(); }catch(e){ console.warn("[가톨릭길동무]", e); }
       if(typeof dioceseLoaded==='function') dioceseLoaded();
     };
-    frame.src='diocese.html?v=V1-48';
+    frame.src='diocese.html?v=V1-50';
   }else if(!restore){
     try{ frame.contentWindow && frame.contentWindow.resetDioceseFirstPage && frame.contentWindow.resetDioceseFirstPage(); }catch(e){ console.warn("[가톨릭길동무]", e); }
   }
@@ -1821,7 +1821,7 @@ const _PARISH_DIOCESE_ASSETS={
 };
 const _PARISH_DIOCESE_LOAD_STATE={};
 const _PARISH_DIOCESE_LOAD_PROMISES={};
-const _PARISH_ASSET_VERSION='V1-48';
+const _PARISH_ASSET_VERSION='V1-50';
 function _getParishDioceseAsset(code){
   return _PARISH_DIOCESE_ASSETS[code] || null;
 }
@@ -1984,7 +1984,7 @@ function _ensureParishDataLoaded(){
 }
 _initParishDataFromGlobal();
 
-const _PRAYER_ASSET_VERSION='V1-48';
+const _PRAYER_ASSET_VERSION='V1-50';
 let _prayerModuleLoadPromise=null;
 function _isPrayerModuleReady(){
   return typeof window.initPrayerView === 'function' &&
@@ -2029,7 +2029,7 @@ try{ window.ensurePrayerModuleLoaded=ensurePrayerModuleLoaded; }catch(e){ consol
 let _RT_RAW = [];
 let _retreatRawLoaded = false;
 let _retreatDataLoadPromise = null;
-const _RETREAT_ASSET_VERSION='V1-48';
+const _RETREAT_ASSET_VERSION='V1-50';
 
 let RETREATS = [];
 function _buildRetreatList(raw){
@@ -2277,7 +2277,7 @@ const _TY={'A':'성지','B':'순례지','C':'순교 사적지'};
 
 let _shrineRawLoaded = false;
 let _shrineDataLoadPromise = null;
-const _SHRINE_ASSET_VERSION='V1-48';
+const _SHRINE_ASSET_VERSION='V1-50';
 let SHRINES = [];
 let JUKRIMGUL_IDX = -1;
 function _decodeShrineHomePage(hp){
@@ -4433,37 +4433,45 @@ function renderList(){
   else body.innerHTML='<div class="empty-msg">검색 결과가 없습니다</div>';
   return;
   }
-  /* 검색어 있을 때 이름 시작 일치 우선 정렬 */
+  /* 검색어 있을 때 성당명 일치 우선 정렬 — 그룹 내·그룹 간 모두 적용 */
   if(q){
     const nq=q.replace(/\s+/g,'');
+    function _score(name){
+      const n=name.replace(/\s+/g,'');
+      if(n===nq)           return 0; // 정확 일치
+      if(n.startsWith(nq)) return 1; // 이름 시작
+      return 3;                       // 주소만 일치
+    }
+    // 그룹 내 정렬
     Object.keys(groups).forEach(dio=>{
-      groups[dio].sort((a,b)=>{
-        const an=a.s.name.replace(/\s+/g,''),bn=b.s.name.replace(/\s+/g,'');
-        const ae=an===nq,be=bn===nq;
-        if(ae&&!be) return -1; if(!ae&&be) return 1;
-        const as=an.startsWith(nq),bs=bn.startsWith(nq);
-        if(as&&!bs) return -1; if(!as&&bs) return 1;
-        return 0;
-      });
+      groups[dio].sort((a,b)=>_score(a.s.name)-_score(b.s.name));
     });
-  }
-  body.innerHTML='';
-  Object.entries(groups).forEach(([dio,entries])=>{
-  const hd=document.createElement('div');
-  hd.className='dio-hd';hd.textContent=dio;
-  body.appendChild(hd);
-  entries.forEach(({s,i})=>{
-   const c=_getModeMarkerColor(s);
-   const dotColor = (_mode==='retreat') ? OAI_RETREAT_LIST_DOT_COLOR : c;
-   const d=document.createElement('div');
-   d.className='list-item';
-   d.innerHTML=`<div class="li-dot" style="background:${dotColor}"></div>
+    // 그룹 간 정렬 (각 그룹의 최고 점수 기준)
+    const dioOrder=Object.keys(groups).sort((a,b)=>{
+      const sa=groups[a].reduce((m,x)=>Math.min(m,_score(x.s.name)),9);
+      const sb=groups[b].reduce((m,x)=>Math.min(m,_score(x.s.name)),9);
+      return sa-sb;
+    });
+    body.innerHTML='';
+    dioOrder.forEach(dio=>{
+      const hd=document.createElement('div');
+      hd.className='dio-hd'; hd.textContent=dio;
+      body.appendChild(hd);
+      groups[dio].forEach(({s,i})=>{
+        const c=_getModeMarkerColor(s);
+        const dotColor=(_mode==='retreat')?OAI_RETREAT_LIST_DOT_COLOR:c;
+        const d=document.createElement('div');
+        d.className='list-item';
+        d.innerHTML=`<div class="li-dot" style="background:${dotColor}"></div>
     <div class="li-info"><div class="li-name">${s.name}</div><div class="li-sub">${s.addr.substring(0,28)}${s.addr.length>28?'…':''}</div></div>
     <span class="li-badge" style="background:${c}18!important;color:${c}!important">${_mode==='shrine'?s.type:(_mode==='retreat'?'피정의 집':'성당')}</span>`;
-   d.onclick=()=>selectItem(i);
-   body.appendChild(d);
-  });
-  });
+        d.onclick=()=>selectItem(i);
+        body.appendChild(d);
+      });
+    });
+    return;
+  }
+
 }
 
 function onListSearch(v){
