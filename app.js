@@ -1264,13 +1264,6 @@ window.addEventListener('load', syncCoverUpdateVersionState, true);
   function openGuideManual(){
     hideModal('guide-intro-modal');
     showModal('guide-manual-modal');
-    // 뒤로가기가 커버 trap을 소비하지 않도록 전용 state를 쌓는다.
-    // back → 이 state 소비 → trap 그대로 살아있음 → 커버 back → toast 정상
-    try{
-      if(history && history.pushState && !(history.state && history.state.guideManualOpen)){
-        history.pushState({guideManualOpen:true}, '', location.href);
-      }
-    }catch(_e){}
     // 주요 기능을 확인한 사용자는 일주일간 자동 안내를 다시 띄우지 않는다.
     setVal(KEY_HIDE_UNTIL, now() + HIDE_DAYS*24*60*60*1000);
   }
@@ -5824,11 +5817,6 @@ document.addEventListener('DOMContentLoaded', function bindEvents() {
       modal.classList.add('show');
       modal.setAttribute('aria-hidden', 'false');
       try{ document.body.classList.add('modal-open'); }catch(e){}
-      try{
-        if(history && history.pushState && !(history.state && history.state.coverMenuOpen)){
-          history.pushState({coverMenuOpen:true}, '', location.href);
-        }
-      }catch(_e){}
     }
     function closeMenu(){
       modal.classList.remove('show');
@@ -5855,6 +5843,10 @@ document.addEventListener('DOMContentLoaded', function bindEvents() {
     on('cover-menu-guide-btn', 'click', function(e){
       if(e && e.preventDefault) e.preventDefault();
       closeMenu();
+      try{
+        // 뒤로가기가 커버 trap을 소비하지 않도록 전용 state를 쌓는다
+        if(history && history.pushState) history.pushState({guideManualOpen:true}, '', location.href);
+      }catch(_e){}
       try{
         if(window.openGuideManual) window.openGuideManual();
         else if(typeof openGuideManual === 'function') openGuideManual();
