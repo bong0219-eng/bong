@@ -585,6 +585,7 @@
        !appActive() 체크 전에 처리해야 토스트가 잘못 발동되지 않는다. */
     if(window.isCoverMenuPopupOpen && window.isCoverMenuPopupOpen()){
       try{ if(typeof window.closeCoverMenuPopup === 'function') window.closeCoverMenuPopup(); }catch(e){ console.warn('[가톨릭길동무]', e); }
+      try{ if(typeof window._resetCoverExitReady === 'function') window._resetCoverExitReady(); }catch(e){ console.warn('[가톨릭길동무]', e); }
       try{ if(typeof window._clearCoverExitArmed === 'function') window._clearCoverExitArmed(); }catch(e){ console.warn('[가톨릭길동무]', e); }
       armCoverBackTrap('cover-menu-close');
       return;
@@ -622,6 +623,7 @@
     }
     if(window.isCoverMenuPopupOpen && window.isCoverMenuPopupOpen()){
       try{ if(typeof window.closeCoverMenuPopup === 'function') window.closeCoverMenuPopup(); }catch(e){ console.warn('[가톨릭길동무]', e); }
+      try{ if(typeof window._resetCoverExitReady === 'function') window._resetCoverExitReady(); }catch(e){}
       try{ if(typeof window._clearCoverExitArmed === 'function') window._clearCoverExitArmed(); }catch(e){}
       return;
     }
@@ -780,7 +782,7 @@
   window.__APP_FONT_SCALE_GUARD__=true;
   // V3-S: 커버 글자 크기 조절은 prayer.js에 의존하지 않는 공통 함수가 담당한다.
   // prayer.js는 기도문 화면이 열렸을 때 같은 localStorage 값을 읽어 자체 UI를 맞춘다.
-  var QA_URL="qa-firebase.html?v=V1-50";
+  var QA_URL="qa-firebase.html?v=V1-51";
   var FONT_KEY='prayer_font_size';
   var BASE=16;
   var FONT_SIZES=[13,14,15,16,17,18,19,20,21,22,24,26,28,30];
