@@ -169,3 +169,19 @@ function doExit(){
   closeExitDlg();
   attemptAppExit();
 }
+
+/* ── window 전역 노출 (patches.js 등 외부에서 window.* 로 접근) ── */
+window._resetCoverExitReady   = _resetCoverExitReady;
+window._clearCoverExitArmed   = _clearCoverExitArmed;
+window._armCoverExitWindow    = _armCoverExitWindow;
+window._isCoverExitArmed      = _isCoverExitArmed;
+window._isCoverScreenVisible  = _isCoverScreenVisible;
+window._isAppScreenActive     = _isAppScreenActive;
+window._ensureCoverBackTrap   = _ensureCoverBackTrap;
+window._resetCoverBackTrap    = _resetCoverBackTrap;
+window._ensureAppBackTrap     = _ensureAppBackTrap;
+window._resetAppBackTrap      = _resetAppBackTrap;
+window._showBackToast         = _showBackToast;
+window.attemptAppExit         = attemptAppExit;
+window.closeExitDlg           = closeExitDlg;
+window.doExit                 = doExit;
