@@ -1267,7 +1267,15 @@ window.addEventListener('load', syncCoverUpdateVersionState, true);
     // 주요 기능을 확인한 사용자는 일주일간 자동 안내를 다시 띄우지 않는다.
     setVal(KEY_HIDE_UNTIL, now() + HIDE_DAYS*24*60*60*1000);
   }
-  function closeGuideManual(){ hideModal('guide-manual-modal'); }
+  function closeGuideManual(){
+    hideModal('guide-manual-modal');
+    // 확인버튼으로 닫을 때: guideManualOpen state가 히스토리에 남지 않도록 trap state로 교체
+    try{
+      if(history.state && history.state.guideManualOpen){
+        history.replaceState({_p:1, oai_cover_trap:'guide-confirm'}, '', location.href);
+      }
+    }catch(_e){}
+  }
   function closeIntroLater(){
     hideModal('guide-intro-modal');
     var count = getInt(KEY_COUNT) + 1;
