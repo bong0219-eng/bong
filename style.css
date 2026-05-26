@@ -4233,3 +4233,16 @@ html.ios-device #diocese-view.open,
 html.ios-device #qna-view.open {
   overflow: hidden !important;
 }
+
+/* Step 3: Font Awesome CDN 제거 후 로컬 문자 아이콘 정렬 */
+#missa-close span,
+.pr-star span,
+.pr-chevron,
+#prayer-search-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-style: normal;
+  line-height: 1;
+}
