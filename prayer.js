@@ -627,8 +627,8 @@ function prBindSwipeTabs(){
 window.prBindSwipeTabs = prBindSwipeTabs;
 prBindSwipeTabs();
 
-/* V1-31: 기도문 본문 좌우 스와이프 시 웹사이트와 같은 화살표 피드백만 복구.
-   본문 이동/뒤로가기/탭 전환 로직은 변경하지 않는다. */
+
+/* V1-18: 기도문 본문 좌우 스와이프 시 웹사이트와 같은 화살표 피드백만 복구 */
 function prBindDetailSwipeArrow(){
   var body = document.getElementById('prayer-detail-body');
   if (!body || body.__prDetailSwipeArrowBound) return;

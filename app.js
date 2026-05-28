@@ -904,12 +904,26 @@ try{ window._shouldMassQuickReturn=_shouldMassQuickReturn; window._shouldPrayerQ
 /* ═══════════════════════════════════════════════
    §3. 앱 새로고침 / 업데이트
    ═══════════════════════════════════════════════ */
+
+function oaiFormatCoverVersionHtml(version, suffixText){
+  var v = String(version || 'V1').trim() || 'V1';
+  var m = v.match(/^(V1)(-.+)$/);
+  var main = m ? m[1] : v;
+  var sub = m ? m[2] : '';
+  function esc(x){ return String(x).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] || c); }); }
+  return '<span class="refresh-version-main">' + esc(main) + '</span>' + (sub ? '<span class="refresh-version-sub">' + esc(sub) + '</span>' : '') + ' ' + esc(suffixText || '새로고침');
+}
+function oaiSetCoverRefreshButtonLabel(btn, version, suffixText){
+  if(!btn) return;
+  try{ btn.innerHTML = oaiFormatCoverVersionHtml(version, suffixText); }
+  catch(_e){ btn.textContent = (version || 'V1') + ' ' + (suffixText || '새로고침'); }
+}
 function _runRefreshAppFilesOnly(){
   var btn = document.getElementById('cover-update-btn');
   try{
     if(btn){
       btn.disabled = true;
-      btn.textContent = ((btn.getAttribute('data-target-version') || 'V1') + ' 새로고침 중');
+      oaiSetCoverRefreshButtonLabel(btn, btn.getAttribute('data-target-version') || 'V1', '새로고침 중');
     }
     if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
     // V37: 새로고침 전에는 레이아웃/스크롤/모달 DOM을 건드리지 않고,
@@ -1074,7 +1088,7 @@ function syncCoverUpdateVersionState(){
     if(!current && marker) current = String(marker.textContent || '').trim();
     if(!current) current = target;
     var mismatch = current !== target;
-    btn.textContent = mismatch ? (target + ' 업데이트 필요') : (target + ' 새로고침');
+    oaiSetCoverRefreshButtonLabel(btn, target, mismatch ? '업데이트 필요' : '새로고침');
     box.classList.toggle('update-needed', mismatch);
     if(marker){
       marker.textContent = target || 'V1';
@@ -1413,7 +1427,7 @@ function openDioceseView(opts){
       if(!restore) try{ frame.contentWindow && frame.contentWindow.resetDioceseFirstPage && frame.contentWindow.resetDioceseFirstPage(); }catch(e){ console.warn("[가톨릭길동무]", e); }
       if(typeof dioceseLoaded==='function') dioceseLoaded();
     };
-    frame.src='diocese.html?v=V1-40';
+    frame.src='diocese.html?v=V1-28';
   }else if(!restore){
     try{ frame.contentWindow && frame.contentWindow.resetDioceseFirstPage && frame.contentWindow.resetDioceseFirstPage(); }catch(e){ console.warn("[가톨릭길동무]", e); }
   }
@@ -1810,7 +1824,7 @@ const _PARISH_DIOCESE_ASSETS={
 };
 const _PARISH_DIOCESE_LOAD_STATE={};
 const _PARISH_DIOCESE_LOAD_PROMISES={};
-const _PARISH_ASSET_VERSION='V1-40';
+const _PARISH_ASSET_VERSION='V1-28';
 function _getParishDioceseAsset(code){
   return _PARISH_DIOCESE_ASSETS[code] || null;
 }
@@ -1973,7 +1987,7 @@ function _ensureParishDataLoaded(){
 }
 _initParishDataFromGlobal();
 
-const _PRAYER_ASSET_VERSION='V1-40';
+const _PRAYER_ASSET_VERSION='V1-28';
 let _prayerModuleLoadPromise=null;
 function _isPrayerModuleReady(){
   return typeof window.initPrayerView === 'function' &&
@@ -2018,7 +2032,7 @@ try{ window.ensurePrayerModuleLoaded=ensurePrayerModuleLoaded; }catch(e){ consol
 let _RT_RAW = [];
 let _retreatRawLoaded = false;
 let _retreatDataLoadPromise = null;
-const _RETREAT_ASSET_VERSION='V1-40';
+const _RETREAT_ASSET_VERSION='V1-28';
 
 let RETREATS = [];
 function _buildRetreatList(raw){
@@ -2267,7 +2281,7 @@ const _TY={'A':'성지','B':'순례지','C':'순교 사적지'};
 
 let _shrineRawLoaded = false;
 let _shrineDataLoadPromise = null;
-const _SHRINE_ASSET_VERSION='V1-40';
+const _SHRINE_ASSET_VERSION='V1-28';
 let SHRINES = [];
 let JUKRIMGUL_IDX = -1;
 function _decodeShrineHomePage(hp){
@@ -4693,10 +4707,7 @@ function _loadNearbyWithDist(lat,lng,items,getIdx,getColor,getLabel){
   }
 
   if(body){
-    const keepCurrentShrineList = _mode==='shrine' && _nearbyCache && _nearbyCache.length && body.querySelector && body.querySelector('.nearby-item');
-    // 성지 내주변은 지도 bounds 갱신과 목록 교체가 겹치면 화면이 두 번 번쩍일 수 있으므로,
-    // 이미 목록이 있으면 계산 중 문구로 비우지 않고 기존 목록을 유지한 뒤 최종 결과만 교체한다.
-    if(!keepCurrentShrineList) body.innerHTML='<div class="empty-msg nearby-distance-loading">📍 정확한 거리를 계산 중입니다...</div>';
+    body.innerHTML='<div class="empty-msg nearby-distance-loading">📍 정확한 거리를 계산 중입니다...</div>';
   }
 
   // 성당 첫 진입/내주변 목록은 정확한 도로거리 계산이 끝난 뒤에 표시한다.
@@ -4720,15 +4731,11 @@ function _loadNearbyWithDist(lat,lng,items,getIdx,getColor,getLabel){
 function _renderNearbyDone(prelim,results,getIdx,getColor,getLabel,phase){
   const sorted=prelim.map((x,i)=>({x,r:results[i]||{km:x.d*1.35,dur:null}})).sort((a,b)=>a.r.km-b.r.km).slice(0,10);
   _nearbyCache=sorted.map(o=>o.x.p);
-  const shouldUpdateShrineMap = phase==='final'&&_mode==='shrine'&&_map;
+  if(phase==='final'&&_mode==='shrine'&&_map) _showAllShrinesOnMapWithNearbyBounds(_nearbyCache,_myLat,_myLng);
   if(phase==='final'&&_mode==='parish'&&_map) _showParishNearbyMarkersOnMap(_nearbyCache,_myLat,_myLng,phase);
   const body=$('nearby-body');
   if(!body) return;
   const scrollTop=body.scrollTop||0;
-  if(shouldUpdateShrineMap){
-    body.classList.add('oai-nearby-render-stable');
-    try{ document.documentElement.classList.add('oai-shrine-nearby-stabilizing'); }catch(_e){}
-  }
   body.innerHTML=sorted.map((o,i)=>{
     const idx=getIdx(o.x.p);
     const c=getColor(o.x.p);
@@ -4740,26 +4747,6 @@ function _renderNearbyDone(prelim,results,getIdx,getColor,getLabel,phase){
     return `<div class="nearby-item" onclick="selectItem(${idx},{fromNearby:true})"><div class="nearby-num" style="background:${c}!important">${i+1}</div><div class="nearby-info"><div class="nearby-name">${o.x.p.name}</div><div class="nearby-addr">${o.x.p.addr.substring(0,26)}${o.x.p.addr.length>26?'…':''}</div></div><div class="nearby-meta"><div class="nearby-type" style="background:${c}18!important;color:${c}!important">${lbl}</div><div class="nearby-dist" style="color:${isEst?'#aaa':c}!important">${distTxt}${dur}</div></div></div>`;
   }).join('');
   if(phase==='final') body.scrollTop=scrollTop;
-  if(shouldUpdateShrineMap){
-    // 성지 내주변 목록은 목록 표시와 지도 마커/bounds 갱신이 겹치며 화면이 두 번 깜빡일 수 있다.
-    // V1-37의 뒤로가기/종료 흐름은 건드리지 않고, 성지 지도 갱신만 늦춰 한 번만 실행한다.
-    const signature = String(Math.round((_myLat||0)*100000)) + ',' + String(Math.round((_myLng||0)*100000)) + ':' + _nearbyCache.map(function(x){ return x && x.name ? x.name : ''; }).join('|');
-    const run=function(){
-      try{
-        if(window.__oaiLastShrineNearbyMapSignature !== signature){
-          window.__oaiLastShrineNearbyMapSignature = signature;
-          _showAllShrinesOnMapWithNearbyBounds(_nearbyCache,_myLat,_myLng);
-        }
-      }catch(e){ console.warn('[가톨릭길동무]', e); }
-      setTimeout(function(){
-        try{ body.classList.remove('oai-nearby-render-stable'); }catch(_e){}
-        try{ document.documentElement.classList.remove('oai-shrine-nearby-stabilizing'); }catch(_e){}
-      }, 260);
-    };
-    if(window.requestIdleCallback) requestIdleCallback(run, {timeout:700});
-    else if(window.requestAnimationFrame) requestAnimationFrame(function(){ setTimeout(run, 420); });
-    else setTimeout(run, 460);
-  }
 }
 function _loadNearbyShrines(lat,lng){
   _loadNearbyWithDist(lat,lng,SHRINES,p=>SHRINES.indexOf(p),p=>TC[p.type]||'#555',p=>p.type);
@@ -6170,12 +6157,31 @@ document.addEventListener('DOMContentLoaded', function bindEvents() {
         else if(typeof openGuideManual === 'function') openGuideManual();
       }catch(err){ console.warn('[가톨릭길동무]', err); }
     });
+    function markInternalPrivacyNavigation(){
+      try{
+        sessionStorage.setItem('oai_internal_return_no_effect_once','1');
+        sessionStorage.setItem('oai_internal_page_nav','privacy');
+        sessionStorage.removeItem('oai_external_nav_started_at');
+        sessionStorage.removeItem('oai_external_nav_pagehide');
+        sessionStorage.removeItem('oai_external_nav_kind');
+        sessionStorage.removeItem('oai_external_nav_pending');
+        sessionStorage.removeItem('oai_external_nav_hold_until');
+        sessionStorage.removeItem('oai_external_nav_force_release_at');
+        sessionStorage.removeItem('oai_refresh_veil_until');
+        sessionStorage.removeItem('oai_refresh_veil_hold_ms');
+        sessionStorage.removeItem('oai_refresh_veil_reason');
+        sessionStorage.removeItem('oai_refresh_veil_visible_until');
+      }catch(_e){}
+    }
     on('cover-menu-qna-btn', 'click', function(e){
       if(e && e.preventDefault) e.preventDefault();
       closeMenu();
       try{ openQnaView(); }catch(err){ console.warn('[가톨릭길동무]', err); }
     });
-    on('cover-menu-privacy-link', 'click', function(){ closeMenu(); });
+    on('cover-menu-privacy-link', 'click', function(){
+      markInternalPrivacyNavigation();
+      closeMenu();
+    });
     document.addEventListener('keydown', function(e){
       if(e && e.key === 'Escape' && modal.classList.contains('show')) closeMenu();
     });

@@ -19,7 +19,7 @@
     .page {
       width: min(920px, 100%);
       margin: 0 auto;
-      padding: 22px 16px 42px;
+      padding: calc(22px + env(safe-area-inset-top, 0px)) 16px 42px;
     }
     .hero {
       background: #0e1535;
@@ -302,7 +302,7 @@
 
 <script>
 var oaiPrivacyReturning = false;
-function oaiPrepareNoReturnEffectToApp(){
+function oaiPreparePrivacyNoReturnEffectToApp(){
   try{
     sessionStorage.setItem('oai_internal_return_no_effect_once','1');
     sessionStorage.setItem('oai_internal_page_nav','privacy');
@@ -321,7 +321,7 @@ function oaiPrepareNoReturnEffectToApp(){
 function privacyCloseToApp(){
   if(oaiPrivacyReturning) return;
   oaiPrivacyReturning = true;
-  oaiPrepareNoReturnEffectToApp();
+  oaiPreparePrivacyNoReturnEffectToApp();
   try{
     if(window.history && window.history.length > 1){
       window.history.back();
@@ -345,6 +345,12 @@ function privacyCloseToApp(){
       privacyCloseToApp();
     }, {capture:true});
   }
+  window.addEventListener('pagehide', function(){
+    oaiPreparePrivacyNoReturnEffectToApp();
+  }, true);
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'hidden') oaiPreparePrivacyNoReturnEffectToApp();
+  }, true);
 })();
 </script>
 

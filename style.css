@@ -119,7 +119,7 @@
 
   --bg-color:   #f7f0e5;
 
-  --cover-top-safe: calc(env(safe-area-inset-top, 0px) + clamp(60px, calc(var(--cover-vh, 1vh) * 9.2), 82px));
+  --cover-top-safe: calc(env(safe-area-inset-top, 0px) + clamp(72px, calc(var(--cover-vh, 1vh) * 10.6), 94px));
   --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(14px, calc(var(--cover-vh, 1vh) * 2.0), 24px));
   --cover-h:    min(calc(var(--cover-vh, 1dvh) * 100), 100dvh);
   --text-main:  #3e362e;
@@ -247,7 +247,7 @@ html, body {
   color: var(--text-main);
   font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   padding-top: var(--cover-top-safe);
-  padding-bottom: var(--cover-bottom-safe);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 44px);
   box-sizing: border-box;
   height: var(--cover-h);
   min-height: var(--cover-h);
@@ -581,12 +581,11 @@ html.retreat-mode #tabbar .tab-btn.active {
   background: none;
   border: none;
   outline: none;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1a1a2e;
+  font-size: 15px;
+  color: #374151;
   font-family: inherit;
 }
-.srch-inner input::placeholder, #srch-modal .sm-si input::placeholder { color: #8a7d6d; font-size: 13px; font-weight: 500; }
+.srch-inner input::placeholder, #srch-modal .sm-si input::placeholder { color: #8a8f98; }
 .srch-x { background: none; border: none; color: rgba(255,255,255,.58); font-size: 24px; font-weight: 900; line-height: 1; width: 30px; height: 30px; min-width: 30px; cursor: pointer; padding: 0; display: none; align-items: center; justify-content: center; }
 
 .filter-btn, .region-search-btn {
@@ -1091,12 +1090,12 @@ html.retreat-mode #srch-modal #sm-tab-bar .sm-tab.active {
   background: linear-gradient(180deg, #fffdf9, #f6efe6);
   z-index: 860;
   border-top: 1px solid #e4d7c5;
-  border-radius: 24px 24px 0 0;
+  border-radius: 24px;
   max-height: 52vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   box-shadow: 0 -12px 36px rgba(0,0,0,.16);
-  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-bottom: 0;
   will-change: transform;
 }
 #info-card.open { display: block; }
@@ -1148,14 +1147,14 @@ html.retreat-mode #srch-modal #sm-tab-bar .sm-tab.active {
   border: 1.5px solid #c5d9f5;
   border-radius: 10px;
   padding: 0 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   color: #1565c0;
   height: 46px;
   white-space: nowrap;
   overflow: hidden;
 }
-.ic-tel-icon { font-size: 18px; }
+.ic-tel-icon { font-size: 16px; }
 .ic-route-btn {
   flex: 1;
   background: var(--pilgrim, #1f2a44);
@@ -1163,7 +1162,7 @@ html.retreat-mode #srch-modal #sm-tab-bar .sm-tab.active {
   border: none;
   border-radius: 10px;
   padding: 0 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   cursor: pointer;
   font-family: inherit;
@@ -1180,7 +1179,7 @@ html.retreat-mode #srch-modal #sm-tab-bar .sm-tab.active {
   height: 46px;
   padding: 0 4px;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   text-align: center;
   cursor: pointer;
@@ -1205,7 +1204,7 @@ html.retreat-mode #srch-modal #sm-tab-bar .sm-tab.active {
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
   font-family: inherit;
   background: #fee500;
@@ -1231,18 +1230,18 @@ html.retreat-mode #srch-modal #sm-tab-bar .sm-tab.active {
 .rs-start-box { background: #f0f5ff; border-color: #1565c0; }
 .rs-end-box   { background: #fff5f5; border-color: #c0392b; }
 .rs-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.rs-lbl { flex: 1; font-size: 14px; color: #1a1a2e; font-weight: 600; font-family: inherit; }
-.rs-lbl.filled { color: #1a1a2e; font-weight: 600; }
-.rs-lbl.empty  { color: #8a7d6d; font-weight: 500; }
+.rs-lbl { flex: 1; font-size: 14px; color: #555; font-weight: 500; }
+.rs-lbl.filled { color: var(--ink); font-weight: 700; }
+.rs-lbl.empty  { color: #aaa; }
 .rs-myloc { background: none; border: 1px solid var(--border); border-radius: 14px; padding: 6px 11px; font-size: 12px; color: var(--pilgrim); cursor: pointer; font-family: inherit; white-space: nowrap; }
 .rs-x { width:30px; height:30px; border-radius:50%; background: none; border: none; color: #999; font-size: 24px; font-weight:900; line-height:1; cursor: pointer; padding: 0; display:flex; align-items:center; justify-content:center; }
 .rs-swap-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
 .rs-result { background: #fff; border-radius: 12px; padding: 12px; border: 1.5px solid var(--border); box-shadow: 0 2px 10px rgba(14,21,53,.08); }
 .rs-stats { display: flex; gap: 8px; margin-bottom: 10px; }
-.rs-stat { flex: 1; background: var(--navy); border-radius: 10px; padding: 11px 8px; text-align: center; }
-.rs-stat-lbl { font-size: 10.5px; color: var(--gold); font-weight: 700; margin-bottom: 5px; letter-spacing: .03em; }
-.rs-stat-val { font-size: 21px; font-weight: 900; color: #fff; line-height: 1; }
-.rs-stat-unit { font-size: 12px; color: rgba(255,255,255,.75); font-weight: 600; }
+.rs-stat { flex: 1; background: var(--navy); border-radius: 10px; padding: 13px 8px; text-align: center; }
+.rs-stat-lbl { font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 6px; letter-spacing: .03em; }
+.rs-stat-val { font-size: 24px; font-weight: 900; color: #fff; line-height: 1; }
+.rs-stat-unit { font-size: 14px; color: rgba(255,255,255,.75); font-weight: 600; }
 .rs-note { font-size: 12px; color: #7a4f00; margin-bottom: 6px; display: none; background: #fff8e1; border-left: 3px solid #f39c12; border-radius: 6px; padding: 7px 10px; line-height: 1.6; }
 .rs-hint { font-size: 14px; color: #aaa; text-align: center; padding: 16px 0; line-height: 1.8; }
 .route-btns { display: flex; gap: 8px; margin-top: 8px; }
@@ -1706,7 +1705,8 @@ html.retreat-mode .ric-hd { background: linear-gradient(135deg, #3F6F5A, #4F846C
 .trail-url { font-size: 11px; color: #2563eb; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
 .trail-arr { font-size: 14px; color: #94a3b8; flex-shrink: 0; margin-left: 6px; }
 .trail-loc-btn { position: absolute; right: 14px; bottom: calc(18px + env(safe-area-inset-bottom, 0)); z-index: 5; background: rgba(255,255,255,.94); border: 1.5px solid #dde3ee; border-radius: 24px; box-shadow: 0 2px 10px rgba(0,0,0,.12); padding: 12px 16px; display: flex; align-items: center; gap: 6px; font-family: inherit; font-size: 13px; font-weight: 700; color: #2563eb; cursor: pointer; }
-.trail-sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; background: linear-gradient(180deg, #fffdf9, #f6efe4); border-radius: 26px 26px 0 0; border-top: 1px solid #eadfce; box-shadow: 0 -16px 32px rgba(0,0,0,.18); padding: 0 0 calc(28px + env(safe-area-inset-bottom, 0)); transform: translateY(110%); transition: transform .25s cubic-bezier(.4,0,.2,1); pointer-events: none; overflow: visible; height: auto; }
+.trail-sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; background: linear-gradient(180deg, #fffdf9, #f6efe4); border-radius: 26px 26px 0 0; border-top: 1px solid #eadfce; box-shadow: 0 -16px 32px rgba(0,0,0,.18); padding: 0 0 0; transform: translateY(110%); transition: transform .25s cubic-bezier(.4,0,.2,1); pointer-events: none; overflow: visible; height: auto; }
+.trail-sheet::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(-1 * (env(safe-area-inset-bottom, 0px) + 18px)); height: calc(env(safe-area-inset-bottom, 0px) + 20px); background: #f6efe4; pointer-events: none; }
 .trail-sheet.open { transform: none; pointer-events: all; }
 .trail-sh-handle { width: 36px; height: 4px; border-radius: 2px; background: #e8ecf3; margin: 10px auto 0; }
 .trail-sh-close { position: absolute; top: 12px; right: 14px; width: 30px; height: 30px; border-radius: 50%; background: #f1f5f9; border: 1px solid #e2e8f0; cursor: pointer; font-size: 20px; font-weight: 900; line-height: 1; color: #64748b; display: flex; align-items: center; justify-content: center; }
@@ -1956,8 +1956,7 @@ html.retreat-mode .ric-hd { background: linear-gradient(135deg, #3F6F5A, #4F846C
   border: 1px solid #ddd5c8;
   border-left-width: 4px;
   border-radius: 11px;
-  padding: 15px 13px;
-  min-height: 66px;
+  padding: 12px 13px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1973,7 +1972,7 @@ html.retreat-mode .ric-hd { background: linear-gradient(135deg, #3F6F5A, #4F846C
 .pr-star { background: none; border: none; padding: 3px; cursor: pointer; color: #ccccdd; font-size: 20px; line-height: 1; transition: color .14s; }
 .pr-star.on { color: #f59e0b; }
 .pr-chevron { color: #b0a89e; font-size: 12px; }
-.pr-empty { text-align: center; padding: 52px 20px; color: #b0a89e; font-size: 14px; background: #fffbf2; border: 1px dashed #ddd5c8; border-radius: 11px; line-height: 1.9; }
+.pr-empty { text-align: center; padding: 44px 20px; color: #b0a89e; font-size: 14px; background: #fffbf2; border: 1px dashed #ddd5c8; border-radius: 11px; line-height: 1.9; }
 
 #prayer-detail {
   position: absolute;
@@ -2145,8 +2144,9 @@ html.oai-cover-booting #cover > * {
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  gap: clamp(3px, calc(var(--cover-vh, 1vh) * 0.7), 6px);
+  gap: clamp(5px, calc(var(--cover-vh, 1vh) * 0.8), 10px);
   box-sizing: border-box;
+  transform: translateY(clamp(8px, calc(var(--cover-vh, 1vh) * 1.6), 16px));
 }
 
 .cover-grid {
@@ -2358,15 +2358,15 @@ html.app-active #cover-action-row { display: none; }
 }
 
 #cover-bottom-note {
-  position: relative;
-  left: auto;
-  right: auto;
-  bottom: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
   flex: 0 0 auto;
   width: 100%;
-  max-width: 720px;
-  margin: clamp(8px, calc(var(--cover-vh, 1vh) * 1.2), 14px) auto 0;
-  padding: 0 22px 0 60px;
+  max-width: none;
+  margin: 0 auto;
+  padding: 0 18px;
   text-align: center;
   font-size: clamp(7.8px, calc(var(--cover-vh, 1vh) * 1.1), 9px);
   font-weight: 500;
@@ -2376,6 +2376,7 @@ html.app-active #cover-action-row { display: none; }
   pointer-events: none;
   z-index: 130;
   box-sizing: border-box;
+  transform: none;
 }
 #cover #oai-build-marker {
   position: fixed;
@@ -2864,7 +2865,6 @@ html.ios-device #cover-main-block {
   height: calc((var(--cover-vh, 1vh) * 100) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - clamp(178px, calc(var(--cover-vh, 1vh) * 24), 222px));
   max-height: 670px;
   padding-bottom: 4px;
-  gap: clamp(3px, calc(var(--cover-vh, 1vh) * 0.7), 6px);
 }
 html.ios-device #cover .cover-card, html.ios-device #cover .cv-btn { padding: 7px; gap: 5px; }
 html.ios-device #cover .cover-emoji, html.ios-device #cover .cover-icon-wrap { font-size: 34px; }
@@ -2984,7 +2984,7 @@ html.oai-font-global #region-body .dio-hd { font-size: calc(17px * var(--app-inn
   .mass-quick-panel .guide-badge { font-size: calc(18px * var(--app-font-scale)); min-height: 40px; margin-bottom: 16px; }
 }
 @media (max-height: 650px) {
-  #cover { --cover-top-safe: calc(env(safe-area-inset-top, 0px) + clamp(58px, calc(var(--cover-vh, 1vh) * 9.4), 74px)); --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(12px, calc(var(--cover-vh, 1vh) * 1.8), 20px)); padding-top: var(--cover-top-safe); padding-bottom: var(--cover-bottom-safe); }
+  #cover { --cover-top-safe: calc(env(safe-area-inset-top, 0px) + clamp(70px, calc(var(--cover-vh, 1vh) * 10.8), 86px)); --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(12px, calc(var(--cover-vh, 1vh) * 1.8), 20px)); padding-top: var(--cover-top-safe); padding-bottom: var(--cover-bottom-safe); }
   #cover .cover-header { padding-bottom: 12px; }
   #cover .cover-title { font-size: clamp(18px, 5vw, 24px); }
   #cover .cover-subtitle { font-size: 10px; }
@@ -3155,7 +3155,7 @@ html.retreat-mode #list-body .li-name{color:#111827!important}
 html:not(.parish-mode):not(.retreat-mode) #tabbar,html.parish-mode #tabbar,html.retreat-mode #tabbar{background:rgba(255,255,255,.96)!important;border-bottom:1px solid #d8dee6!important}
 .tab-btn .tab-icon{color:inherit!important}
 html:not(.parish-mode):not(.retreat-mode) .sheet-hd,html:not(.parish-mode):not(.retreat-mode) .filter-bar,html:not(.parish-mode):not(.retreat-mode) .region-wrap,html:not(.parish-mode):not(.retreat-mode) .sm-hd,html:not(.parish-mode):not(.retreat-mode) .sm-filter{background:var(--oai-shrine-header)!important}
-html.parish-mode .sheet-hd,html.parish-mode .filter-bar,html.parish-mode .region-wrap,html.parish-mode .sm-hd,html.retreat-mode .sheet-hd,html.retreat-mode .filter-bar,html.retreat-mode .region-wrap,html.retreat-mode .sm-hd,.srch-x{color:#4b5563!important}
+html.parish-mode .sheet-hd,html.parish-mode .filter-bar,html.parish-mode .region-wrap,html.parish-mode .sm-hd,html.retreat-mode .sheet-hd,html.retreat-mode .filter-bar,html.retreat-mode .region-wrap,html.retreat-mode .sm-hd,.srch-inner input,.srch-inner input::placeholder,.srch-x{color:#4b5563!important}
 .sheet-title,.sm-title{color:#c49b56!important;font-weight:800!important}
 .sheet-x{color:#c49b56!important;border-color:rgba(255,255,255,.28)!important;background:rgba(255,255,255,.78)!important;border:1px solid rgba(196,155,86,.22)!important}
 .sm-x{color:#c49b56!important;border-color:rgba(212,170,106,.58)!important;background:rgba(14,21,53,.88)!important;border:1px solid rgba(212,170,106,.58)!important}
@@ -3643,7 +3643,7 @@ html.retreat-mode .ic-type-badge{
   --retreat-category-soft-final:#DDECE5;
 }
 
-#app #info-card .ic-name{font-size:calc(18px * var(--app-inner-font-scale,1))!important;line-height:1.34!important}
+#app #info-card .ic-name{font-size:calc(17px * var(--app-inner-font-scale,1))!important;line-height:1.35!important}
 #app #info-card .ic-addr-val{font-size:calc(17px * var(--app-inner-font-scale,1))!important;line-height:1.5!important}
 #app #info-card .ic-sub,
 #app #info-card .ic-addr-lbl,
@@ -3653,8 +3653,7 @@ html.retreat-mode .ic-type-badge{
 #app #info-card .ic-tel-btn,
 #app #info-card .ic-route-btn,
 #app #info-card .ic-link-btn,
-#app #info-card .btn-kakao-nav{font-size:14px!important;line-height:1.12!important;letter-spacing:-.035em!important}
-#app #info-card .ic-tel-icon{font-size:15px!important}
+#app #info-card .btn-kakao-nav{font-size:17px!important}
 
 html.retreat-mode{
   --retreat-primary:var(--retreat-category-final);
@@ -4389,7 +4388,7 @@ html.app-active #cover-menu-btn { display: none !important; }
 }
 
 #cover {
-  --cover-top-safe: calc(env(safe-area-inset-top, 0px) + clamp(60px, calc(var(--cover-vh, 1vh) * 8.2), 76px)) !important;
+  --cover-top-safe: calc(env(safe-area-inset-top, 0px) + clamp(72px, calc(var(--cover-vh, 1vh) * 9.6), 88px)) !important;
   --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(14px, calc(var(--cover-vh, 1vh) * 2.0), 24px)) !important;
   padding-top: var(--cover-top-safe) !important;
   padding-bottom: var(--cover-bottom-safe) !important;
@@ -4560,7 +4559,7 @@ html.app-active #cover-menu-btn { display: none !important; }
 
 @media (max-height: 740px) {
   #cover {
-    --cover-top-safe: calc(env(safe-area-inset-top, 0px) + clamp(54px, calc(var(--cover-vh, 1vh) * 7.2), 66px)) !important;
+    --cover-top-safe: calc(env(safe-area-inset-top, 0px) + clamp(66px, calc(var(--cover-vh, 1vh) * 8.6), 78px)) !important;
     --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(14px, calc(var(--cover-vh, 1vh) * 1.9), 22px)) !important;
   }
   #cover-font-controls,
@@ -4967,113 +4966,12 @@ body.gp-info-page #privacy-back-app-link {
   line-height: 1;
 }
 
-/* V1-13: Google Play 커버 하단 구조 정리
-   - 안내 문구는 커버의 최하단에 고정한다.
-   - 새로고침 버튼은 하단 안내 문구와 분리해 카테고리 카드 묶음 아래에 둔다. */
-#cover {
-  --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(42px, calc(var(--cover-vh, 1vh) * 5.2), 56px)) !important;
-  padding-bottom: var(--cover-bottom-safe) !important;
-}
 
-#cover-main-block {
-  padding-bottom: 0 !important;
-}
+/* V1-28: Android 209 위치 안정화 1단계 CSS 정리
+   - 커버 하단/새로고침/인포카드/순례길 카드의 누적 보정 블록을 한곳으로 통합한다.
+   - 기능, 지도, 위치, 뒤로가기 로직은 건드리지 않는다. */
 
-#cover #cover-action-row.cover-action-single {
-  position: relative !important;
-  left: auto !important;
-  right: auto !important;
-  top: auto !important;
-  bottom: auto !important;
-  width: 100% !important;
-  height: 36px !important;
-  min-height: 36px !important;
-  max-height: 36px !important;
-  margin: clamp(3px, calc(var(--cover-vh, 1vh) * 0.7), 6px) 0 0 !important;
-  padding: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  flex: 0 0 36px !important;
-  z-index: 10 !important;
-  pointer-events: auto !important;
-  box-sizing: border-box !important;
-}
-
-#cover #cover-action-row.cover-action-single #cover-update-box {
-  flex: 0 0 auto !important;
-  width: clamp(126px, 32vw, 150px) !important;
-  min-width: 126px !important;
-  max-width: 150px !important;
-  height: 36px !important;
-  min-height: 36px !important;
-  max-height: 36px !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
-}
-
-#cover .cover-refresh-main-btn {
-  min-height: 36px !important;
-  height: 36px !important;
-  max-height: 36px !important;
-  font-size: calc(13.2px * var(--app-font-scale)) !important;
-  padding: 0 12px !important;
-}
-
-#cover-bottom-note {
-  position: fixed !important;
-  left: 50% !important;
-  right: auto !important;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
-  transform: translateX(-50%) !important;
-  flex: none !important;
-  width: min(100vw, 720px) !important;
-  max-width: min(100vw, 720px) !important;
-  margin: 0 !important;
-  padding: 0 18px !important;
-  text-align: center !important;
-  font-size: clamp(8px, 2.1vw, 9.2px) !important;
-  line-height: 1.35 !important;
-  letter-spacing: -.02em !important;
-  color: rgba(96,86,76,.72) !important;
-  pointer-events: none !important;
-  z-index: 130 !important;
-  box-sizing: border-box !important;
-}
-
-@media (max-height: 740px) {
-  #cover {
-    --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(38px, calc(var(--cover-vh, 1vh) * 4.9), 50px)) !important;
-  }
-  #cover #cover-action-row.cover-action-single {
-    height: 34px !important;
-    min-height: 34px !important;
-    max-height: 34px !important;
-    flex-basis: 34px !important;
-    margin-top: clamp(2px, calc(var(--cover-vh, 1vh) * 0.55), 5px) !important;
-  }
-  #cover #cover-action-row.cover-action-single #cover-update-box {
-    width: clamp(118px, 32vw, 140px) !important;
-    min-width: 118px !important;
-    max-width: 140px !important;
-    height: 34px !important;
-    min-height: 34px !important;
-    max-height: 34px !important;
-  }
-  #cover .cover-refresh-main-btn {
-    min-height: 34px !important;
-    height: 34px !important;
-    font-size: calc(12.5px * var(--app-font-scale)) !important;
-    padding: 0 10px !important;
-  }
-  #cover-bottom-note {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 7px) !important;
-    font-size: clamp(7.7px, 2.0vw, 8.8px) !important;
-    line-height: 1.32 !important;
-  }
-}
-
-/* V1-13: 성지 화면 안에 CBCK 참고 출처 문구를 작게 표시 */
+/* 성지 화면 안에 CBCK 참고 출처 문구를 작게 표시 */
 .shrine-source-note {
   display: none;
   flex-shrink: 0;
@@ -5095,21 +4993,33 @@ html.retreat-mode .shrine-source-note {
   display: none !important;
 }
 
+/* 피정의집 모드 상단 탭 긴 문구 잘림 방지 */
+html.retreat-mode #tab-btn-list {
+  padding-left: 1px !important;
+  padding-right: 1px !important;
+}
+html.retreat-mode #tab-list-lbl {
+  font-size: 11.5px !important;
+  letter-spacing: -0.095em !important;
+  line-height: 1.02 !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+}
+html.retreat-mode #tab-btn-list.active #tab-list-lbl {
+  font-size: 11.3px !important;
+}
 
-
-/* V1-13: Google Play 커버 하단 최종 정렬
-   - 새로고침은 카테고리 카드 묶음의 일부로 유지한다.
-   - 새로고침과 마지막 카테고리 카드 사이 간격은 카드 간 세로 간격과 맞춘다.
-   - 안내 문구는 별도 최하단 고정이며, 문구 줄 간격을 조금 넓힌다. */
+/* 커버 하단/새로고침 최종 위치 */
 #cover {
-  --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(54px, calc(var(--cover-vh, 1vh) * 6.8), 72px)) !important;
+  --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(18px, calc(var(--cover-vh, 1vh) * 2.2), 28px)) !important;
   padding-bottom: var(--cover-bottom-safe) !important;
+  overflow: visible !important;
 }
-
 #cover-main-block {
-  padding-bottom: 0 !important;
+  gap: clamp(3px, calc(var(--cover-vh, 1vh) * 0.7), 6px) !important;
+  padding-bottom: clamp(0px, calc(var(--cover-vh, 1vh) * 0.45), 5px) !important;
+  transform: translateY(clamp(-2px, calc(var(--cover-vh, 1vh) * -0.2), 0px)) !important;
 }
-
 #cover #cover-action-row.cover-action-single {
   position: relative !important;
   left: auto !important;
@@ -5120,7 +5030,7 @@ html.retreat-mode .shrine-source-note {
   height: 36px !important;
   min-height: 36px !important;
   max-height: 36px !important;
-  margin: clamp(4px, calc(var(--cover-vh, 1vh) * 0.75), 7px) 0 0 !important;
+  margin: 0 !important;
   padding: 0 !important;
   display: flex !important;
   align-items: center !important;
@@ -5130,7 +5040,6 @@ html.retreat-mode .shrine-source-note {
   pointer-events: auto !important;
   box-sizing: border-box !important;
 }
-
 #cover #cover-action-row.cover-action-single #cover-update-box {
   flex: 0 0 auto !important;
   width: clamp(126px, 32vw, 150px) !important;
@@ -5142,25 +5051,48 @@ html.retreat-mode .shrine-source-note {
   margin: 0 !important;
   box-sizing: border-box !important;
 }
-
 #cover .cover-refresh-main-btn {
+  width: 100% !important;
   min-height: 36px !important;
   height: 36px !important;
   max-height: 36px !important;
-  font-size: calc(13.2px * var(--app-font-scale)) !important;
   padding: 0 12px !important;
+  border-radius: 13px !important;
+  background: linear-gradient(180deg, #ece7de 0%, #ddd6c9 100%) !important;
+  color: #1f2a44 !important;
+  border: 1.5px solid rgba(31,42,68,.16) !important;
+  font-size: calc(13.2px * var(--app-font-scale)) !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: -.02em !important;
+  box-shadow: 0 6px 12px rgba(31,42,68,.08) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  box-sizing: border-box !important;
 }
-
+#cover .cover-refresh-main-btn .refresh-version-main {
+  font-size: 1em;
+  font-weight: 900;
+}
+#cover .cover-refresh-main-btn .refresh-version-sub {
+  font-size: .56em;
+  font-weight: 900;
+  vertical-align: super;
+  margin-left: 1px;
+  letter-spacing: -.04em;
+}
 #cover-bottom-note {
   position: fixed !important;
-  left: 50% !important;
-  right: auto !important;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 10px) !important;
-  transform: translateX(-50%) !important;
-  width: min(100vw, 720px) !important;
-  max-width: min(100vw, 720px) !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: calc(env(safe-area-inset-bottom, 0px) - clamp(22px, calc(var(--cover-vh, 1vh) * 2.6), 36px)) !important;
+  transform: none !important;
+  flex: none !important;
+  width: 100% !important;
+  max-width: none !important;
   margin: 0 !important;
-  padding: 0 20px !important;
+  padding: 0 16px !important;
   text-align: center !important;
   font-size: clamp(8px, 2.1vw, 9.4px) !important;
   line-height: 1.55 !important;
@@ -5171,16 +5103,53 @@ html.retreat-mode .shrine-source-note {
   box-sizing: border-box !important;
 }
 
+/* 지도 하단 정보카드/순례길 카드 최종 위치 */
+#info-card {
+  bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+.trail-sheet {
+  bottom: 6px !important;
+  padding-bottom: 0 !important;
+  border-radius: 26px 26px 0 0 !important;
+  background: linear-gradient(180deg, #fffdf9, #f6efe4) !important;
+}
+.trail-sheet::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(-1 * (env(safe-area-inset-bottom, 0px) + 26px));
+  height: calc(env(safe-area-inset-bottom, 0px) + 30px);
+  background: #f6efe4;
+  pointer-events: none;
+}
+#app #info-card .ic-tel-btn,
+#app #info-card .ic-route-btn,
+#app #info-card .ic-link-btn,
+#app #info-card .btn-kakao-nav {
+  font-size: 14px !important;
+  letter-spacing: -.035em !important;
+}
+#app #info-card .ic-tel-icon {
+  font-size: 16px !important;
+}
+
 @media (max-height: 740px) {
   #cover {
-    --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(50px, calc(var(--cover-vh, 1vh) * 6.4), 66px)) !important;
+    --cover-bottom-safe: calc(env(safe-area-inset-bottom, 0px) + clamp(16px, calc(var(--cover-vh, 1vh) * 2.0), 24px)) !important;
+  }
+  #cover-main-block {
+    gap: clamp(2px, calc(var(--cover-vh, 1vh) * 0.55), 5px) !important;
+    padding-bottom: 0 !important;
+    transform: translateY(clamp(-1px, calc(var(--cover-vh, 1vh) * -0.15), 0px)) !important;
   }
   #cover #cover-action-row.cover-action-single {
     height: 34px !important;
     min-height: 34px !important;
     max-height: 34px !important;
     flex-basis: 34px !important;
-    margin-top: clamp(3px, calc(var(--cover-vh, 1vh) * 0.55), 5px) !important;
+    margin-top: 0 !important;
   }
   #cover #cover-action-row.cover-action-single #cover-update-box {
     width: clamp(118px, 32vw, 140px) !important;
@@ -5197,64 +5166,11 @@ html.retreat-mode .shrine-source-note {
     padding: 0 10px !important;
   }
   #cover-bottom-note {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 9px) !important;
+    bottom: calc(env(safe-area-inset-bottom, 0px) - clamp(18px, calc(var(--cover-vh, 1vh) * 2.3), 30px)) !important;
     font-size: clamp(7.7px, 2.0vw, 8.9px) !important;
     line-height: 1.48 !important;
   }
-}
-
-/* V1-24: 피정의집 모드 상단 탭 긴 문구 잘림 방지 */
-html.retreat-mode #tab-btn-list {
-  padding-left: 1px !important;
-  padding-right: 1px !important;
-}
-html.retreat-mode #tab-list-lbl {
-  font-size: 11.5px !important;
-  letter-spacing: -0.095em !important;
-  line-height: 1.02 !important;
-  max-width: 100% !important;
-  white-space: nowrap !important;
-}
-html.retreat-mode #tab-btn-list.active #tab-list-lbl {
-  font-size: 11.3px !important;
-}
-
-
-
-/* V1-29: 성지 내주변 최종 목록 렌더링 중 시각적 깜빡임 완화 */
-#nearby-body.oai-nearby-render-stable .nearby-item {
-  transition: none !important;
-  animation: none !important;
-}
-
-/* V1-36: V1-32 기준 커버 카테고리-새로고침 간격만 재정리
-   - 종료문구/core/popstate 흐름은 건드리지 않는다.
-   - 새로고침은 카테고리 카드 묶음의 일부처럼 보이게 한다.
-   - 실제 간격은 카테고리 박스 사이 세로 간격과 비슷하게 맞춘다. */
-#cover-main-block {
-  gap: clamp(3px, calc(var(--cover-vh, 1vh) * 0.7), 6px) !important;
-}
-#cover #cover-action-row.cover-action-single {
-  margin-top: 0 !important;
-}
-@media (max-height: 740px) {
-  #cover-main-block {
-    gap: clamp(2px, calc(var(--cover-vh, 1vh) * 0.55), 5px) !important;
+  .trail-sheet {
+    bottom: 5px !important;
   }
-  #cover #cover-action-row.cover-action-single {
-    margin-top: 0 !important;
-  }
-}
-
-
-/* V1-39: V1-37 기준 성지 내주변 목록/지도 갱신 순간 깜빡임 완화 */
-html.oai-shrine-nearby-stabilizing #sheet-nearby,
-html.oai-shrine-nearby-stabilizing #nearby-body,
-html.oai-shrine-nearby-stabilizing #nearby-body .nearby-item {
-  transition: none !important;
-  animation: none !important;
-}
-html.oai-shrine-nearby-stabilizing #nearby-body {
-  background: var(--bg-unified, var(--ui-bg)) !important;
-  will-change: auto !important;
 }
