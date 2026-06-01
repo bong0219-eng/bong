@@ -496,13 +496,17 @@ function prShowExternalGuide(message, duration){
       '<div class="pr-external-guide-cross">✝</div>' +
       '<div class="pr-external-guide-text">' + prSafeText(message) + '</div>' +
       '</div>';
+    try{ document.documentElement.classList.add('pr-external-guide-active'); }catch(_e){}
     guide.classList.add('show');
     document.body.appendChild(guide);
     window.clearTimeout(window.__prExternalGuideTimer);
     window.__prExternalGuideTimer = window.setTimeout(function(){
       try{
         guide.classList.remove('show');
-        window.setTimeout(function(){ if(guide && guide.parentNode) guide.parentNode.removeChild(guide); }, 180);
+        window.setTimeout(function(){
+          try{ if(guide && guide.parentNode) guide.parentNode.removeChild(guide); }catch(_e){}
+          try{ if(!document.getElementById('pr-external-guide')) document.documentElement.classList.remove('pr-external-guide-active'); }catch(_e){}
+        }, 180);
       }catch(_e){}
     }, Math.max(450, duration || 900));
   }catch(e){ console.warn('[가톨릭길동무]', e); }
