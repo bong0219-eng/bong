@@ -496,8 +496,8 @@ function prShowExternalGuide(message, duration){
       '<div class="pr-external-guide-cross">✝</div>' +
       '<div class="pr-external-guide-text">' + prSafeText(message) + '</div>' +
       '</div>';
+    guide.classList.add('show');
     document.body.appendChild(guide);
-    requestAnimationFrame(function(){ guide.classList.add('show'); });
     window.clearTimeout(window.__prExternalGuideTimer);
     window.__prExternalGuideTimer = window.setTimeout(function(){
       try{
@@ -520,7 +520,6 @@ function prMaybeShowExternalReturnGuide(){
     if(sessionStorage.getItem('oai_prayer_external_return_pending') !== '1') return;
     sessionStorage.removeItem('oai_prayer_external_return_pending');
     sessionStorage.removeItem('oai_prayer_external_return_ts');
-    if(typeof window.oaiHoldStabilityVeil === 'function') window.oaiHoldStabilityVeil('prayer-link-return', 850);
     prShowExternalGuide('앱으로 돌아오는 중입니다.', 850);
   }catch(e){ console.warn('[가톨릭길동무]', e); }
 }
@@ -539,8 +538,6 @@ function prOpenOfficialPrayer(prayer){
     sessionStorage.setItem('oai_prayer_list_restore', JSON.stringify(window.__oaiPrayerListRestore));
   }catch(e){ console.warn('[가톨릭길동무]', e); }
   prMarkExternalReturnFlag();
-  try{ if(typeof markExternalReturnStabilize === 'function') markExternalReturnStabilize('prayer-link'); }catch(e){ console.warn('[가톨릭길동무]', e); }
-  try{ if(typeof window.oaiHoldStabilityVeil === 'function') window.oaiHoldStabilityVeil('prayer-link-leave', 900); }catch(e){ console.warn('[가톨릭길동무]', e); }
   prShowExternalGuide('공식 기도문 페이지로 이동합니다.', 850);
   window.setTimeout(function(){
     try{ window.location.href = url; }
